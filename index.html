@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌻 Condomínio Girassol</title>
+<style>
+:root{--am:#d97706;--am2:#f59e0b;--am3:#fef3c7;--cinza:#f4f6f8;--borda:#e2e8f0;--txt:#1a1a2e;--br:#fff;--vm:#dc2626;--vd:#16a34a;--az:#1d4ed8;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#c8cfd8;color:var(--txt);min-height:100vh;display:flex;flex-direction:column;align-items:center;}
+.folha{width:100%;max-width:1280px;background:#f4f6f8;min-height:100vh;box-shadow:0 0 40px rgba(0,0,0,.25);display:flex;flex-direction:column;}
+#tela-login{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#d97706,#92400e);flex:1;}
+.login-box{background:#fff;border-radius:16px;padding:48px 40px;width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.linput{width:100%;padding:12px 16px;border:2px solid var(--borda);border-radius:8px;font-size:15px;outline:none;margin-bottom:12px;}
+.linput:focus{border-color:var(--am);}
+.lbtn{width:100%;padding:13px;background:var(--am);color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;}
+#app{display:none;}
+.header{background:var(--am);color:#fff;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+.hbtn{padding:6px 12px;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;}
+.comp-bar{background:#fff;border-bottom:1px solid var(--borda);padding:10px 20px;display:flex;align-items:center;gap:12px;}
+.comp-mes{font-size:19px;font-weight:700;color:var(--am);}
+.bnav{padding:5px 12px;border:1px solid var(--borda);background:#fff;border-radius:6px;font-size:13px;cursor:pointer;}
+.bnav:hover{background:var(--am);color:#fff;border-color:var(--am);}
+.tabs{background:#fff;border-bottom:1px solid var(--borda);padding:0 20px;display:flex;overflow-x:auto;}
+.tab{padding:13px 18px;font-size:13px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;color:#6b7280;}
+.tab:hover,.tab.ativo{color:var(--am);}
+.tab.ativo{border-bottom-color:var(--am);font-weight:600;}
+.content{padding:20px;}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:14px;margin-bottom:20px;}
+.rcard{background:#fff;border-radius:12px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.rcard-lbl{font-size:11px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.rcard-val{font-size:22px;font-weight:700;color:var(--am);}
+.barra{background:#e2e8f0;border-radius:99px;height:10px;overflow:hidden;margin:6px 0 4px;}
+.bfill{height:100%;border-radius:99px;background:var(--am);}
+.inad-card{background:#fff5f5;border:1px solid #fca5a5;border-radius:10px;padding:12px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
+.alerta{background:#fff8e1;border:1px solid #ffd54f;border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px;font-size:13px;}
+.alerta.urg{background:#fff5f5;border-color:#fca5a5;}
+.pcfg{background:#fff;border-radius:12px;padding:16px 20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;}
+.pcampo{display:flex;flex-direction:column;gap:4px;}
+.pclbl{font-size:11px;color:#6b7280;font-weight:600;text-transform:uppercase;}
+.pcinp{padding:7px 10px;border:1px solid var(--borda);border-radius:6px;font-size:14px;width:155px;outline:none;}
+.pcinp:focus{border-color:var(--am);}
+.btnrat{padding:8px 14px;background:var(--am);color:#fff;border:none;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;}
+.modal-overlay.aberto{display:flex;}
+.modal{background:#fff;border-radius:16px;padding:28px;width:600px;max-width:96vw;max-height:92vh;overflow-y:auto;}
+.mtit{font-size:18px;font-weight:700;margin-bottom:20px;color:var(--am);}
+.macs{display:flex;gap:10px;margin-top:20px;justify-content:flex-end;}
+.bok{background:var(--am);color:#fff;border:none;border-radius:8px;padding:9px 22px;font-size:14px;font-weight:600;cursor:pointer;}
+.bcan{background:#e2e8f0;color:var(--txt);border:none;border-radius:8px;padding:9px 22px;font-size:14px;cursor:pointer;}
+.mc{margin-bottom:10px;}
+.mc label{display:block;font-size:11px;color:#6b7280;font-weight:600;margin-bottom:3px;}
+.mc input,.mc select,.mc textarea{width:100%;padding:8px 10px;border:1px solid var(--borda);border-radius:6px;font-size:14px;outline:none;font-family:inherit;}
+.mc input:focus,.mc select:focus,.mc textarea:focus{border-color:var(--am);}
+.mc2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.fech-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:16px;}
+.painel-linha{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;}
+.painel-linha:last-child{border-bottom:none;}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--am);color:#fff;padding:12px 22px;border-radius:10px;font-size:14px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:9999;opacity:0;transform:translateY(20px);transition:all .3s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast.erro{background:var(--vm);}
+.doc{font-family:'Times New Roman',serif;font-size:13px;line-height:1.8;padding:30px;}
+.doc h1{text-align:center;font-size:16px;margin-bottom:16px;}
+.doc p{margin-bottom:10px;text-align:justify;}
+.doc .assinaturas{margin-top:50px;display:grid;grid-template-columns:1fr 1fr;gap:30px;}
+.doc .ass{text-align:center;border-top:1px solid #000;padding-top:6px;font-size:12px;}
+/* Campo extra flexível */
+.campo-extra-row{display:grid;grid-template-columns:1fr 1.5fr auto;gap:6px;align-items:end;margin-bottom:6px;}
+.add-campo-btn{font-size:12px;color:var(--am);background:none;border:1px dashed var(--am);border-radius:7px;cursor:pointer;padding:5px 12px;font-weight:600;width:100%;margin-top:4px;}
+
+.layout-u{display:flex;gap:16px;align-items:flex-start;}
+.indice{position:sticky;top:70px;width:170px;flex-shrink:0;background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.07);padding:8px;max-height:calc(100vh - 90px);overflow-y:auto;}
+.indice-tit{font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.8px;padding:4px 6px 6px;}
+.ind-item{display:block;width:100%;text-align:left;border:none;border-left:4px solid #d1d5db;background:#f9fafb;border-radius:6px;padding:5px 8px;margin-bottom:4px;cursor:pointer;font-family:inherit;}
+.ind-item .n{font-size:12px;font-weight:700;color:#374151;}
+.ind-item .q{font-size:10px;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ind-item.ok{border-left-color:#16a34a;background:#e8f5ee;}
+.ind-item.ok .n{color:#166534;}
+.ind-item.deb{border-left-color:#dc2626;background:#fff1f1;}
+.ind-item.deb .n{color:#b91c1c;}
+.ind-item:hover{filter:brightness(.96);}
+.u-main{flex:1;min-width:0;}
+.fech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:16px;align-items:start;}
+@media(max-width:820px){.layout-u{flex-direction:column;}.indice{position:static;width:100%;max-height:none;display:flex;flex-wrap:wrap;gap:4px;}.ind-item{width:auto;min-width:96px;margin-bottom:0;}.indice-tit{width:100%;}}
+</style>
+</head>
+<body>
+<div class="folha">
+<!-- LOGIN -->
+<div id="tela-login">
+  <div class="login-box">
+    <div style="font-size:56px;margin-bottom:6px">🌻</div>
+    <div style="font-size:22px;font-weight:700;color:var(--am);margin-bottom:4px">Condomínio Girassol</div>
+    <div style="font-size:13px;color:#6b7280;margin-bottom:28px">Sistema de Gestão</div>
+    <input type="password" id="login-senha" class="linput" placeholder="Senha de acesso" onkeydown="if(event.key==='Enter')fazerLogin()">
+    <button class="lbtn" onclick="fazerLogin()">🌻 Entrar</button>
+    <div id="login-erro" style="color:var(--vm);font-size:13px;margin-top:8px;display:none">Senha incorreta.</div>
+  </div>
+</div>
+<!-- APP -->
+<div id="app">
+  <div class="header">
+    <div>
+      <div style="font-size:17px;font-weight:700">🌻 Condomínio Girassol</div>
+      <div style="font-size:11px;opacity:.8" id="header-end">—</div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="hbtn" style="background:#27ae60;color:#fff" onclick="salvarNuvem()">☁️ Salvar</button>
+      <button class="hbtn" style="background:#e67e22;color:#fff" onclick="carregarNuvem()">⬇️ Carregar</button>
+      <button class="hbtn" style="background:#b45309;color:#fff" onclick="destravaTudo()">🔓 Destravar</button>
+      <button class="hbtn" style="background:rgba(255,255,255,.2);color:#fff" onclick="sair()">Sair</button>
+    </div>
+  </div>
+  <div class="comp-bar">
+    <span style="font-size:11px;color:#6b7280;font-weight:600;text-transform:uppercase">📅 Competência</span>
+    <button class="bnav" onclick="navMes(-1)">← Ant.</button>
+    <span class="comp-mes" id="comp-label"></span>
+    <select id="comp-select" style="padding:5px 8px;border:1px solid var(--borda);border-radius:6px;font-size:13px" onchange="mudarMes(this.value)"></select>
+    <button class="bnav" onclick="navMes(1)">Próx. →</button>
+  </div>
+  <div class="tabs" id="tabs-wrapper"></div>
+  <div class="content" id="content-area"></div>
+</div>
+</div>
+
+<!-- MODAL NOVA UNIDADE -->
+<div class="modal-overlay" id="modal-unidade">
+  <div class="modal" style="width:360px">
+    <div class="mtit">Nova Unidade</div>
+    <div class="mc"><label>Número / Nome</label><input id="mu-numero" placeholder="Ex: AP. 501 ou Cobertura"></div>
+    <div class="macs">
+      <button class="bcan" onclick="fecharModal('modal-unidade')">Cancelar</button>
+      <button class="bok" onclick="salvarNovaUnidade()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DADOS DO CONDOMÍNIO -->
+<div class="modal-overlay" id="modal-cond">
+  <div class="modal">
+    <div class="mtit">⚙️ Dados do Condomínio</div>
+    <div class="mc2">
+      <div class="mc"><label>Nome do Condomínio</label><input id="mc-nome" value="Condomínio Girassol"></div>
+      <div class="mc"><label>CNPJ (se houver)</label><input id="mc-cnpj" placeholder="00.000.000/0000-00"></div>
+      <div class="mc" style="grid-column:1/-1"><label>Endereço completo</label><input id="mc-end" placeholder="Rua, número, bairro, cidade/ES, CEP"></div>
+      <div class="mc"><label>Síndico(a)</label><input id="mc-sindico" placeholder="Nome completo"></div>
+      <div class="mc"><label>CPF do Síndico(a)</label><input id="mc-sindico-cpf" placeholder="000.000.000-00"></div>
+      <div class="mc"><label>Telefone / WhatsApp</label><input id="mc-tel" placeholder="(27) 9xxxx-xxxx"></div>
+      <div class="mc"><label>E-mail</label><input id="mc-email" placeholder="contato@girassol.com"></div>
+      <div class="mc"><label>Chave PIX para pagamentos</label><input id="mc-pix" placeholder="CPF, e-mail ou telefone"></div>
+      <div class="mc"><label>Banco / Conta</label><input id="mc-banco" placeholder="Ex: Nubank — Agência 0001 / Conta 12345-6"></div>
+    </div>
+    <!-- Campos extras do condomínio -->
+    <div style="margin-top:10px">
+      <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:8px">Campos Adicionais</div>
+      <div id="cond-extras-lista"></div>
+      <button class="add-campo-btn" onclick="addCampoExtra('cond')">+ Adicionar campo</button>
+    </div>
+    <div class="macs">
+      <button class="bcan" onclick="fecharModal('modal-cond')">Cancelar</button>
+      <button class="bok" onclick="salvarDadosCond()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DOCUMENTO -->
+<div class="modal-overlay" id="modal-doc">
+  <div class="modal" style="width:820px">
+    <div class="mtit" id="modal-doc-titulo">Documento</div>
+    <div id="modal-doc-body"></div>
+    <div class="macs">
+      <button class="bcan" onclick="fecharModal('modal-doc')">Fechar</button>
+      <button class="bok" onclick="imprimirDoc()">🖨️ Imprimir / PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SENHA -->
+<div class="modal-overlay" id="modal-senha">
+  <div class="modal" style="width:340px">
+    <div class="mtit">🔒 Confirmar Senha</div>
+    <div class="mc"><label>Senha</label><input type="password" id="modal-senha-input" onkeydown="if(event.key==='Enter')confirmarSenha()"></div>
+    <div id="modal-senha-erro" style="color:var(--vm);font-size:13px;display:none">Senha incorreta.</div>
+    <div class="macs">
+      <button class="bcan" onclick="fecharModal('modal-senha')">Cancelar</button>
+      <button class="bok" onclick="confirmarSenha()">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+const SENHA='girassol';
+const SHEETS_URL='https://script.google.com/macros/s/AKfycbzwJZobN-etaNZJW9EHEbU8lcKmDg1yQxBcE9goII-LTCe5aMk4leON1bg-Qi0nDZEr4Q/exec';
+const CHAVE='girassol_v2';
+const AUTH_KEY='girassol_auth_v2';
+const COR='#d97706';
+const MN=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const MN_PT=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const MN_UP=['JANEIRO','FEVEREIRO','MARÇO','ABRIL','MAIO','JUNHO','JULHO','AGOSTO','SETEMBRO','OUTUBRO','NOVEMBRO','DEZEMBRO'];
+
+let dados={cond:{nome:'Condomínio Girassol',endereco:'',cnpj:'',sindico:'',sindicoCpf:'',tel:'',email:'',pix:'',banco:'',extras:[]},unidades:[],meses:{}};
+let mesSel='', abaAtiva='unidades', _cbSenha=null;
+
+// ===== LOGIN =====
+function fazerLogin(){
+  if(document.getElementById('login-senha').value===SENHA){
+    sessionStorage.setItem(AUTH_KEY,'1');
+    document.getElementById('tela-login').style.display='none';
+    document.getElementById('app').style.display='block';
+    iniciar();
+  } else document.getElementById('login-erro').style.display='block';
+}
+function sair(){sessionStorage.removeItem(AUTH_KEY);location.reload();}
+
+function iniciar(){
+  const h=new Date();
+  mesSel=`${h.getFullYear()}-${String(h.getMonth()+1).padStart(2,'0')}`;
+  carregarLocal();
+  limparCond();
+  if(!dados.unidades||dados.unidades.length===0) criarUnidadesIniciais();
+  if(!dados.cond)dados.cond={nome:'Condomínio Girassol',endereco:'',cnpj:'',sindico:'',sindicoCpf:'',tel:'',email:'',pix:'',banco:'',extras:[]};
+  if(!dados.cond.extras)dados.cond.extras=[];
+  atualizarHeaderEnd();
+  renderCompetencia(); renderTabs(); renderContent();
+}
+function limparCond(){if(dados&&dados.unidades)dados.unidades=dados.unidades.filter(u=>!(u.numero==='Unidade Cond.'||u.numero==='COND'));}
+function carregarLocal(){const d=localStorage.getItem(CHAVE);if(d){try{dados=JSON.parse(d);}catch(e){}}}
+function sv(){localStorage.setItem(CHAVE,JSON.stringify(dados));}
+
+function criarUnidade(num){
+  return {
+    id:'u_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
+    numero: 'AP. '+num,
+    locatario:{nome:'',cpf:'',rg:'',tel:'',email:'',endereco:'',instalacao_edp:'',matricula_cesan:'',cotas_agua:1,data_assinatura:'',vencimento_contrato:'',caucao_tipo:'avista',caucao_valor:'',obs:'',extras:[]},
+    locador:{nome:'',cpf:'',rg:'',tel:'',email:'',endereco:'',extras:[]},
+    aluguel:0,condominio:0,energia_tipo:'transferida',energia_pct:0,
+    extras_imovel:[]
+  };
+}
+function criarUnidadesIniciais(){
+  ['101','102','103','104','105','201','202','203','204','205','206','301','302','303','304','305','401','402','403','404','405'].forEach(n=>dados.unidades.push(criarUnidade(n)));
+  sv();
+}
+function atualizarHeaderEnd(){
+  document.getElementById('header-end').textContent=dados.cond&&dados.cond.endereco?dados.cond.endereco:'—';
+}
+
+// ===== COMPETÊNCIA =====
+function labelMes(m){const[y,mo]=m.split('-');return `${MN[parseInt(mo)-1]}/${y}`;}
+function renderCompetencia(){
+  document.getElementById('comp-label').textContent=labelMes(mesSel);
+  const sel=document.getElementById('comp-select'); sel.innerHTML='';
+  const[y,mo]=mesSel.split('-').map(Number);
+  for(let i=-12;i<=12;i++){
+    const d=new Date(y,mo-1+i,1);
+    const v=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const o=document.createElement('option');
+    o.value=v;o.textContent=labelMes(v);if(v===mesSel)o.selected=true;
+    sel.appendChild(o);
+  }
+}
+function mudarMes(v){mesSel=v;renderCompetencia();renderContent();}
+function navMes(d){
+  const[y,mo]=mesSel.split('-').map(Number);
+  const dt=new Date(y,mo-1+d,1);
+  mesSel=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
+  renderCompetencia();renderContent();
+}
+function mesPrev(m){const[y,mo]=m.split('-').map(Number);const d=new Date(y,mo-2,1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;}
+
+// ===== TABS =====
+function renderTabs(){
+  const w=document.getElementById('tabs-wrapper'); w.innerHTML='';
+  [{id:'unidades',l:'🏢 Unidades'},{id:'painel',l:'📊 Painel'},{id:'fechamento',l:'📈 Fechamento'}].forEach(a=>{
+    const t=document.createElement('div');
+    t.className='tab'+(abaAtiva===a.id?' ativo':'');
+    t.textContent=a.l; t.onclick=()=>{abaAtiva=a.id;renderTabs();renderContent();};
+    w.appendChild(t);
+  });
+  const tc=document.createElement('div');
+  tc.className='tab';tc.style.color=COR;tc.style.fontWeight='600';
+  tc.textContent='⚙️ Condomínio';tc.onclick=()=>abrirModalCond();
+  w.appendChild(tc);
+}
+
+function renderContent(){
+  const area=document.getElementById('content-area');
+  if(abaAtiva==='painel'){renderPainel(area);return;}
+  if(abaAtiva==='fechamento'){renderFechamento(area);return;}
+  renderUnidades(area);
+}
+
+// ===== UNIDADES (VISÃO GERAL) =====
+function renderUnidades(area){
+  let totalMes=0,recebMes=0;
+  dados.unidades.forEach(u=>{
+    const m=dados.meses[`${u.id}__${mesSel}`]||{};
+    const t=calcTotal(u,m);
+    const pags=(m.pagamentos||[]).reduce((s,pg)=>s+(parseFloat(pg.valor)||0),0);
+    totalMes+=t; recebMes+=pags>0?pags:(m.quitado?t:(parseFloat(m.pago)||0));
+  });
+  const pct=totalMes>0?Math.round(recebMes/totalMes*100):0;
+
+  const hoje=new Date(),em60=new Date();em60.setDate(hoje.getDate()+60);
+  let alertasHTML='',inadHTML='',qtdInad=0;
+  dados.unidades.forEach(u=>{
+    const vc=u.locatario&&u.locatario.vencimento_contrato||'';
+    if(vc){const dv=parseDateVenc(vc);if(dv&&dv<=em60){const urg=dv<=hoje;alertasHTML+=`<div class="alerta${urg?' urg':''}"><span>${urg?'🔴':'⚠️'}</span><span><strong>${u.numero}</strong> — ${u.locatario.nome||'—'}: contrato ${urg?'VENCIDO':'vence em breve'} (${vc})</span></div>`;}}
+    const m=dados.meses[`${u.id}__${mesSel}`]||{};
+    const t=calcTotal(u,m);
+    const pags=(m.pagamentos||[]).reduce((s,pg)=>s+(parseFloat(pg.valor)||0),0);
+    const pago=pags>0?pags:(m.quitado?t:(parseFloat(m.pago)||0));
+    if(!m.quitado&&pago<t&&t>0){qtdInad++;inadHTML+=`<div class="inad-card"><div><div style="font-weight:600;color:var(--vm);font-size:14px">${u.locatario&&u.locatario.nome||'—'}</div><div style="font-size:12px;color:#6b7280">${u.numero} · ${u.locatario&&u.locatario.tel||'—'}</div></div><div style="display:flex;align-items:center;gap:10px"><span style="font-size:16px;font-weight:700;color:var(--vm)">R$ ${fmtR(t-pago)}</span><button onclick="enviarCobranca('${u.id}')" style="padding:6px 12px;background:var(--am);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer">📱 Cobrar</button></div></div>`;}
+  });
+
+  const pc=dados.meses[`cond_cfg__${mesSel}`]||{};
+  const tcx=totalCotas(pc);
+  const vCotaX=(parseFloat(pc.conta_agua)>0&&tcx.total>0)?parseFloat(pc.conta_agua)/tcx.total:0;
+  let indHTML='<div class="indice"><div class="indice-tit">Índice</div>';
+  dados.unidades.forEach(u=>{
+    const st=statusUnid(u);const nm=(u.locatario&&u.locatario.nome)||'Sem morador';
+    const cl=st.t>0?(st.quitado?'ok':'deb'):'';
+    indHTML+=`<button class="ind-item ${cl}" onclick="irUnidade('${u.id}')"><div class="n">${esc(u.numero)} ${st.t>0?(st.quitado?'✓':'●'):''}</div><div class="q">${esc(nm)}</div></button>`;
+  });
+  indHTML+=`<button class="ind-item" style="border-left-color:${COR};background:#fef3c7" onclick="abaAtiva='fechamento';renderTabs();renderContent();window.scrollTo(0,0)"><div class="n" style="color:${COR}">📈 Fechamento</div></button></div>`;
+  let html=`<div class="layout-u">${indHTML}<div class="u-main">
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+    <div><div style="font-size:20px;font-weight:700;color:${COR}">🌻 ${dados.cond.nome||'Condomínio Girassol'}</div>
+    <div style="font-size:13px;color:#6b7280">${dados.cond.endereco||'Endereço não cadastrado — clique em ⚙️ Condomínio'}</div></div>
+    <button onclick="abrirModalUnidade()" style="padding:8px 16px;background:${COR};color:#fff;border:none;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer">+ Nova Unidade</button>
+  </div>
+  ${alertasHTML}
+  ${qtdInad>0?`<div class="alerta urg" style="margin-bottom:10px"><span>🔴</span><strong>Inadimplentes: ${qtdInad}</strong></div>${inadHTML}`:''}
+  <div class="rgrid">
+    <div class="rcard"><div class="rcard-lbl">Total do Mês</div><div class="rcard-val">R$ ${fmtR(totalMes)}</div></div>
+    <div class="rcard"><div class="rcard-lbl">Recebido</div><div class="rcard-val" style="color:var(--vd)">R$ ${fmtR(recebMes)}</div></div>
+    <div class="rcard"><div class="rcard-lbl">A Receber</div><div class="rcard-val" style="color:var(--vm)">R$ ${fmtR(totalMes-recebMes)}</div></div>
+    <div class="rcard"><div class="rcard-lbl">Recebimento</div><div class="barra"><div class="bfill" style="width:${pct}%"></div></div><div class="rcard-val">${pct}%</div></div>
+  </div>
+  <div class="pcfg">
+    <div style="font-size:13px;font-weight:700;color:${COR};width:100%;margin-bottom:4px">💧 Água & ⚡ Energia — ${labelMes(mesSel)}</div>
+    <div class="pcampo"><div class="pclbl">💧 Conta Água (R$)</div><input class="pcinp" type="number" step="0.01" value="${pc.conta_agua||''}" placeholder="0,00" onchange="setCondCfg('conta_agua',this.value)"></div>
+    <div class="pcampo"><div class="pclbl">Cotas do Condomínio</div><input class="pcinp" type="number" step="0.25" min="0" value="${pc.cotas_cond!==undefined?pc.cotas_cond:1}" onchange="setCondCfgTxt('cotas_cond',this.value)" title="1 = uma cota; 1.5 = uma e meia; 2 = duas..."></div>
+    <div class="pcampo"><div class="pclbl">⚡ Conta Energia (R$)</div><input class="pcinp" type="number" step="0.01" value="${pc.conta_energia_total||''}" placeholder="0,00" onchange="setCondCfg('conta_energia_total',this.value)"></div>
+    <button class="btnrat" onclick="ratearAgua()">💧 Ratear Água</button>
+    <button class="btnrat" style="background:#e67e22" onclick="ratearEnergia()">⚡ Ratear Energia</button>
+    <div style="width:100%;font-size:12px;color:#6b7280;background:#fef9ee;border-radius:8px;padding:8px 12px">💧 Rateio por <strong>${tcx.total.toLocaleString('pt-BR')} cotas</strong> = ${tcx.un} unidade(s) com morador (${tcx.cotasMor.toLocaleString('pt-BR')} cota(s)) + ${tcx.cc.toLocaleString('pt-BR')} do condomínio${vCotaX>0?` · valor da cota: <strong>R$ ${fmtR(vCotaX)}</strong>`:''} · só entram unidades com morador cadastrado.</div>
+  </div>`;
+
+  dados.unidades.forEach(u=>{html+=renderCardUnidade(u);});
+  html+='</div></div>';
+  area.innerHTML=html;
+}
+
+function setCondCfg(campo,val){
+  const k=`cond_cfg__${mesSel}`;
+  if(!dados.meses[k])dados.meses[k]={};
+  dados.meses[k][campo]=parseFloat(val)||0; sv();
+}
+
+function setCondCfgTxt(campo,val){
+  const k=`cond_cfg__${mesSel}`;
+  if(!dados.meses[k])dados.meses[k]={};
+  if(val===''||val===null)delete dados.meses[k][campo]; else dados.meses[k][campo]=parseFloat(val)||0;
+  sv();renderContent();
+}
+function totalCotas(pc){
+  let n=0,un=0;
+  dados.unidades.forEach(u=>{const l=u.locatario||{};if((l.nome||'').trim()){n+=parseFloat(l.cotas_agua)||0;un++;}});
+  const cc=(pc.cotas_cond!==undefined&&pc.cotas_cond!==null)?(parseFloat(pc.cotas_cond)||0):1;
+  return{un,cotasMor:n,cc,total:n+cc};
+}
+function aguaEdif(pc){
+  if(pc.agua_edif!==undefined&&pc.agua_edif!==null&&pc.agua_edif!=='')return parseFloat(pc.agua_edif)||0;
+  const tc=totalCotas(pc),conta=parseFloat(pc.conta_agua)||0;
+  return (conta>0&&tc.total>0)?Math.round(conta/tc.total*tc.cc*100)/100:0;
+}
+function statusUnid(u){
+  const m=dados.meses[`${u.id}__${mesSel}`]||{};
+  const t=calcTotal(u,m);
+  const pags=(m.pagamentos||[]).reduce((s,pg)=>s+(parseFloat(pg.valor)||0),0);
+  const pago=pags>0?pags:(m.quitado?t:(parseFloat(m.pago)||0));
+  return{t,pago,saldo:Math.max(0,t-pago),quitado:t>0&&(m.quitado||pago>=t)};
+}
+function caucaoInfo(u){
+  const l=u.locatario||{};const arr=l.caucao_pagtos||[];
+  const pago=arr.reduce((s,x)=>s+(parseFloat(x.valor)||0),0);
+  const comb=parseFloat(l.caucao_valor)||0;
+  return{comb,pago,saldo:Math.max(0,comb-pago),arr};
+}
+function irUnidade(id){const el=document.getElementById('card-'+id);if(el){el.scrollIntoView({behavior:'smooth',block:'start'});el.style.outline='3px solid '+COR;setTimeout(()=>el.style.outline='',1500);}}
+function addCaucao(unidId){const u=dados.unidades.find(x=>x.id===unidId);if(!u)return;if(!u.locatario)u.locatario={};if(!u.locatario.caucao_pagtos)u.locatario.caucao_pagtos=[];u.locatario.caucao_pagtos.push({data:new Date().toISOString().split('T')[0],valor:0});sv();renderContent();}
+function remCaucao(unidId,i){const u=dados.unidades.find(x=>x.id===unidId);if(!u||!u.locatario||!u.locatario.caucao_pagtos)return;u.locatario.caucao_pagtos.splice(i,1);sv();renderContent();}
+function setCaucao(unidId,i,campo,val){const u=dados.unidades.find(x=>x.id===unidId);if(!u||!u.locatario||!u.locatario.caucao_pagtos)return;u.locatario.caucao_pagtos[i][campo]=campo==='valor'?(parseFloat(val)||0):val;sv();renderContent();}
+
+function ratearAgua(){
+  const pc=dados.meses[`cond_cfg__${mesSel}`]||{};
+  const conta=parseFloat(pc.conta_agua)||0;
+  const tc=totalCotas(pc);
+  if(!conta){toast('Preencha a conta de água!',true);return;}
+  if(!tc.total){toast('Nenhuma cota para ratear!',true);return;}
+  const vCota=conta/tc.total;
+  dados.unidades.forEach(u=>{
+    const l=u.locatario||{};
+    if(!(l.nome||'').trim())return;
+    const cotas=parseFloat(l.cotas_agua)||0;
+    if(cotas>0){const mk=`${u.id}__${mesSel}`;if(!dados.meses[mk])dados.meses[mk]={};dados.meses[mk].agua_valor=Math.round(vCota*cotas*100)/100;}
+  });
+  sv();renderContent();toast(`💧 Água rateada em ${tc.total} cotas (${tc.un} unidades + condomínio)`);
+}
+
+function ratearEnergia(){
+  const pc=dados.meses[`cond_cfg__${mesSel}`]||{};
+  const conta=parseFloat(pc.conta_energia_total)||0;
+  if(!conta){toast('Preencha a conta total de energia!',true);return;}
+  dados.unidades.forEach(u=>{
+    if(u.energia_tipo==='percentual'){const pct=parseFloat(u.energia_pct)||0;if(pct>0){const mk=`${u.id}__${mesSel}`;if(!dados.meses[mk])dados.meses[mk]={};dados.meses[mk].energia_valor=Math.round(conta*pct/100*100)/100;}}
+  });
+  sv();renderContent();toast('⚡ Energia rateada!');
+}
+
+function calcTotal(u,m){
+  let t=(parseFloat(u.aluguel)||0)+(parseFloat(u.condominio)||0);
+  t+=parseFloat(m.agua_valor)||0;
+  t+=parseFloat(m.iptu)||0;
+  t+=parseFloat(m.lixo)||0;
+  t+=parseFloat(m.outros)||0;
+  if(u.energia_tipo==='percentual')t+=parseFloat(m.energia_valor)||0;
+  if(m.extras)m.extras.forEach(e=>t+=parseFloat(e.valor)||0);
+  // campos extras de mês
+  if(m.campos_extras)m.campos_extras.forEach(e=>t+=parseFloat(e.valor)||0);
+  return t;
+}
+
+// ===== CARD UNIDADE =====
+function renderCardUnidade(u){
+  const mk=`${u.id}__${mesSel}`;
+  const m=dados.meses[mk]||{};
+  const lct=u.locatario||{};
+  const loc=u.locador||{};
+  const trav=m.travado||false;
+  const CK=COR;
+
+  const vA=parseFloat(u.aluguel)||0,vC=parseFloat(u.condominio)||0,vAg=parseFloat(m.agua_valor)||0;
+  const vIP=parseFloat(m.iptu)||0,vLx=parseFloat(m.lixo)||0,vOt=parseFloat(m.outros)||0;
+  const vEn=u.energia_tipo==='percentual'?(parseFloat(m.energia_valor)||0):0;
+  const extArr=m.extras||[];
+  const camposExtMes=m.campos_extras||[];
+  const vExt=extArr.reduce((s,e)=>s+(parseFloat(e.valor)||0),0);
+  const vCExt=camposExtMes.reduce((s,e)=>s+(parseFloat(e.valor)||0),0);
+  const total=vA+vC+vAg+vIP+vLx+vOt+vEn+vExt+vCExt;
+
+  const pags=m.pagamentos||[];
+  const totalPago=pags.reduce((s,pg)=>s+(parseFloat(pg.valor)||0),0);
+  const quitado=totalPago>=total&&total>0;
+  const saldo=Math.max(0,total-totalPago);
+
+  const dv=parseDateVenc(lct.vencimento_contrato||'');
+  const hoje=new Date(),em60=new Date();em60.setDate(hoje.getDate()+60);
+  let badge='';
+  if(dv&&dv<=hoje)badge=`<span style="background:#ffebee;color:#c62828;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700;margin-left:8px">VENCIDO</span>`;
+  else if(dv&&dv<=em60)badge=`<span style="background:#fff8e1;color:#795548;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:700;margin-left:8px">Vence em breve</span>`;
+
+  const sec=l=>`<div style="font-size:11px;font-weight:700;color:#444;letter-spacing:.8px;text-transform:uppercase;margin:14px 0 8px;padding-bottom:5px;border-bottom:2px solid #e0e0e0">${l}</div>`;
+
+  const inp=(label,val,onchange,type='text',extra='')=>
+    `<div style="display:flex;flex-direction:column;gap:3px">
+      <label style="font-size:11px;color:#555;font-weight:600">${label}</label>
+      <input type="${type}" value="${esc(String(val||''))}" ${trav?'disabled':('onchange="'+onchange+'"')} ${extra}
+        style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;background:${trav?'#f5f5f5':'#fff'};width:100%;font-family:inherit;color:${trav?'#999':'inherit'}"
+        ${trav?'':('onfocus="this.style.borderColor=\''+CK+'\'" onblur="this.style.borderColor=\'#e0e0e0\'"')}>
+    </div>`;
+
+  const num=(label,val,onchange)=>
+    `<div style="display:flex;flex-direction:column;gap:2px;width:100px">
+      <label style="font-size:10px;color:#555;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${label}</label>
+      <div style="display:flex;align-items:center;border:1px solid #e0e0e0;border-radius:6px;overflow:hidden;background:${trav?'#f5f5f5':'#fff'}">
+        <span style="padding:4px;font-size:10px;color:#aaa;background:#fafafa;border-right:1px solid #e0e0e0">R$</span>
+        <input type="number" step="0.01" value="${val||0}" ${trav?'disabled':('onchange="'+onchange+'"')}
+          style="width:70px;padding:4px;border:none;outline:none;font-size:12px;background:transparent;font-family:inherit;color:${trav?'#999':'inherit'}">
+      </div>
+    </div>`;
+
+  const sel=(label,opts,selVal,onchange)=>
+    `<div style="display:flex;flex-direction:column;gap:3px">
+      <label style="font-size:11px;color:#555;font-weight:600">${label}</label>
+      <select onchange="${onchange}" style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;background:#fff;font-family:inherit">
+        ${opts.map(o=>`<option value="${o.v}" ${o.v===selVal?'selected':''}>${o.l}</option>`).join('')}
+      </select>
+    </div>`;
+
+  // Extras (valor) por mês
+  const extHtml=extArr.map((e,i)=>
+    `<div style="display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:end;margin-bottom:6px">
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <label style="font-size:11px;color:#555;font-weight:600">Descrição</label>
+        <input value="${esc(e.nome||'')}" onchange="setExtra('${u.id}',${i},'nome',this.value)" placeholder="Ex: Multa, Seguro..."
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <label style="font-size:11px;color:#555;font-weight:600">Valor R$</label>
+        <div style="display:flex;align-items:center;border:1px solid #e0e0e0;border-radius:7px;overflow:hidden">
+          <span style="padding:7px 5px;font-size:11px;color:#aaa;background:#fafafa;border-right:1px solid #e0e0e0">R$</span>
+          <input type="number" step="0.01" value="${e.valor||0}" onchange="setExtra('${u.id}',${i},'valor',this.value)"
+            style="width:90px;padding:7px 8px;border:none;outline:none;font-size:13px">
+        </div>
+      </div>
+      <button onclick="removerExtra('${u.id}',${i})" style="padding:7px 10px;background:#ffebee;color:#c62828;border:none;border-radius:7px;cursor:pointer;font-size:14px;align-self:end">×</button>
+    </div>`
+  ).join('');
+
+  // Campos extras do mês (personalizados)
+  const camposExtHtml=camposExtMes.map((e,i)=>
+    `<div class="campo-extra-row">
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <label style="font-size:11px;color:#555;font-weight:600">Campo</label>
+        <input value="${esc(e.label||'')}" onchange="setCampoExtMes('${u.id}',${i},'label',this.value)" placeholder="Nome do campo"
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <label style="font-size:11px;color:#555;font-weight:600">Valor (texto ou R$)</label>
+        <input value="${esc(String(e.valor||''))}" onchange="setCampoExtMes('${u.id}',${i},'valor',this.value)" placeholder="Valor ou observação"
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%">
+      </div>
+      <button onclick="remCampoExtMes('${u.id}',${i})" style="padding:7px 10px;background:#ffebee;color:#c62828;border:none;border-radius:7px;cursor:pointer;font-size:14px;align-self:end">×</button>
+    </div>`
+  ).join('');
+
+  // Campos extras do locatário
+  const lctExtras=(lct.extras||[]);
+  const lctExtHtml=lctExtras.map((e,i)=>
+    `<div class="campo-extra-row">
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <label style="font-size:11px;color:#555;font-weight:600">Campo</label>
+        <input value="${esc(e.label||'')}" onchange="setSubExtra('${u.id}','locatario',${i},'label',this.value)" placeholder="Nome do campo"
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <label style="font-size:11px;color:#555;font-weight:600">Valor</label>
+        <input value="${esc(String(e.valor||''))}" onchange="setSubExtra('${u.id}','locatario',${i},'valor',this.value)" placeholder="Valor"
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%">
+      </div>
+      <button onclick="remSubExtra('${u.id}','locatario',${i})" style="padding:7px 10px;background:#ffebee;color:#c62828;border:none;border-radius:7px;cursor:pointer;font-size:14px;align-self:end">×</button>
+    </div>`
+  ).join('');
+
+  // Campos extras do locador
+  const locExtras=(loc.extras||[]);
+  const locExtHtml=locExtras.map((e,i)=>
+    `<div class="campo-extra-row">
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <label style="font-size:11px;color:#555;font-weight:600">Campo</label>
+        <input value="${esc(e.label||'')}" onchange="setSubExtra('${u.id}','locador',${i},'label',this.value)" placeholder="Nome do campo"
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <label style="font-size:11px;color:#555;font-weight:600">Valor</label>
+        <input value="${esc(String(e.valor||''))}" onchange="setSubExtra('${u.id}','locador',${i},'valor',this.value)" placeholder="Valor"
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%">
+      </div>
+      <button onclick="remSubExtra('${u.id}','locador',${i})" style="padding:7px 10px;background:#ffebee;color:#c62828;border:none;border-radius:7px;cursor:pointer;font-size:14px;align-self:end">×</button>
+    </div>`
+  ).join('');
+
+  // Campos extras do imóvel/contrato
+  const imovExtras=(u.extras_imovel||[]);
+  const imovExtHtml=imovExtras.map((e,i)=>
+    `<div class="campo-extra-row">
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <label style="font-size:11px;color:#555;font-weight:600">Campo</label>
+        <input value="${esc(e.label||'')}" onchange="setImovExtra('${u.id}',${i},'label',this.value)" placeholder="Nome do campo"
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <label style="font-size:11px;color:#555;font-weight:600">Valor</label>
+        <input value="${esc(String(e.valor||''))}" onchange="setImovExtra('${u.id}',${i},'valor',this.value)" placeholder="Valor"
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%">
+      </div>
+      <button onclick="remImovExtra('${u.id}',${i})" style="padding:7px 10px;background:#ffebee;color:#c62828;border:none;border-radius:7px;cursor:pointer;font-size:14px;align-self:end">×</button>
+    </div>`
+  ).join('');
+
+  const pagHtml=pags.map((pg,i)=>
+    `<div style="display:grid;grid-template-columns:1fr 1fr auto;gap:6px;align-items:end;margin-bottom:6px">
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <label style="font-size:11px;color:#555;font-weight:600">Data</label>
+        <input type="date" value="${pg.data||''}" onchange="setPagamento('${u.id}',${i},'data',this.value)"
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;background:#fff">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <label style="font-size:11px;color:#555;font-weight:600">Valor pago (R$)</label>
+        <div style="display:flex;align-items:center;border:1px solid #e0e0e0;border-radius:7px;overflow:hidden;background:#fff">
+          <span style="padding:7px 6px;font-size:11px;color:#aaa;background:#fafafa;border-right:1px solid #e0e0e0">R$</span>
+          <input type="number" step="0.01" value="${pg.valor||0}" onchange="setPagamento('${u.id}',${i},'valor',this.value)"
+            style="flex:1;padding:7px 8px;border:none;outline:none;font-size:13px">
+        </div>
+      </div>
+      <button onclick="removerPagamento('${u.id}',${i})"
+        style="padding:7px 10px;background:#ffebee;color:#c62828;border:none;border-radius:7px;cursor:pointer;font-size:14px;font-weight:700;align-self:end">×</button>
+    </div>`
+  ).join('');
+
+  const cau=caucaoInfo(u);
+  const cauHtml=cau.arr.map((x,i)=>
+    `<div style="display:grid;grid-template-columns:1fr 1fr auto;gap:6px;align-items:end;margin-bottom:6px">
+      <div style="display:flex;flex-direction:column;gap:3px"><label style="font-size:11px;color:#555;font-weight:600">Data</label>
+        <input type="date" value="${x.data||''}" ${trav?'disabled':''} onchange="setCaucao('${u.id}',${i},'data',this.value)" style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;background:#fff"></div>
+      <div style="display:flex;flex-direction:column;gap:3px"><label style="font-size:11px;color:#555;font-weight:600">Valor (R$)</label>
+        <div style="display:flex;align-items:center;border:1px solid #e0e0e0;border-radius:7px;overflow:hidden;background:#fff"><span style="padding:7px 6px;font-size:11px;color:#aaa;background:#fafafa;border-right:1px solid #e0e0e0">R$</span>
+        <input type="number" step="0.01" value="${x.valor||0}" ${trav?'disabled':''} onchange="setCaucao('${u.id}',${i},'valor',this.value)" style="flex:1;padding:7px 8px;border:none;outline:none;font-size:13px;min-width:0"></div></div>
+      <button onclick="remCaucao('${u.id}',${i})" ${trav?'disabled':''} style="padding:7px 10px;background:#ffebee;color:#c62828;border:none;border-radius:7px;cursor:pointer;font-size:14px;font-weight:700;align-self:end">×</button>
+    </div>`).join('');
+  return `<div style="background:#fff;border-radius:14px;box-shadow:0 2px 12px rgba(0,0,0,.08);margin-bottom:20px;overflow:hidden;scroll-margin-top:70px" id="card-${u.id}">
+    <div style="background:${CK};padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <div>
+        <div style="font-size:17px;font-weight:700;color:#fff">${u.numero}${badge}</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.85)">${lct.nome||'Sem morador'} · ${labelMes(mesSel)}</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+        ${total>0?(quitado?`<span style="background:#dcfce7;color:#166534;border-radius:7px;padding:6px 12px;font-size:12px;font-weight:700">✓ Quitado</span>`:`<span style="background:#fee2e2;color:#b91c1c;border-radius:7px;padding:6px 12px;font-size:12px;font-weight:700">R$ ${fmtR(saldo)} em aberto</span>`):''}
+        <button onclick="salvarUnidade('${u.id}',this)" style="padding:6px 14px;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;background:#fff;color:${CK}" id="btn-salvar-${u.id}">💾 Salvar</button>
+        <button onclick="enviarCobranca('${u.id}')" style="padding:6px 11px;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;background:#27ae60;color:#fff">📱 Cobrar</button>
+        <button onclick="gerarRecibo('${u.id}')" style="padding:6px 11px;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;background:#2980b9;color:#fff">🧾 Recibo</button>
+        <button onclick="abrirContrato('${u.id}')" style="padding:6px 11px;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;background:#7c3aed;color:#fff">📋 Contrato</button>
+        <button onclick="abrirNotificacao('${u.id}')" style="padding:6px 11px;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;background:#e67e22;color:#fff">📝 Notificação</button>
+        <button onclick="abrirAditivo('${u.id}')" style="padding:6px 11px;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;background:#0891b2;color:#fff">📄 Aditivo</button>
+        <button onclick="excluirUnidade('${u.id}')" style="padding:6px 11px;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;background:#c0392b;color:#fff">🗑</button>
+        <button onclick="toggleTrava('${u.id}')" style="padding:6px 11px;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;background:${m.travado?'#f39c12':'rgba(255,255,255,0.25)'};color:#fff">${m.travado?'🔒':'🔓'}</button>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:55% 45%;gap:0">
+      <div style="padding:18px 20px;border-right:1px solid #f0f0f0">
+        ${sec('Dados do Morador')}
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:6px">
+          ${inp('Nome completo',lct.nome,`setSub('${u.id}','locatario','nome',this.value)`)}
+          ${inp('CPF',lct.cpf,`setSub('${u.id}','locatario','cpf',this.value)`)}
+          ${inp('RG',lct.rg,`setSub('${u.id}','locatario','rg',this.value)`)}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:6px">
+          ${inp('Telefone / WhatsApp',lct.tel,`setSub('${u.id}','locatario','tel',this.value)`)}
+          ${inp('E-mail',lct.email,`setSub('${u.id}','locatario','email',this.value)`)}
+          ${inp('Endereço de origem',lct.endereco,`setSub('${u.id}','locatario','endereco',this.value)`)}
+        </div>
+        ${lctExtHtml}
+        <button class="add-campo-btn" onclick="addSubExtra('${u.id}','locatario')">+ Campo do morador</button>
+
+        ${sec('Contrato')}
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:6px">
+          ${inp('Vencimento do Contrato',lct.vencimento_contrato,`setSub('${u.id}','locatario','vencimento_contrato',this.value)`)}
+          ${inp('Data de Assinatura',lct.data_assinatura,`setSub('${u.id}','locatario','data_assinatura',this.value)`)}
+          ${num('Caução (R$)',lct.caucao_valor,`setSub('${u.id}','locatario','caucao_valor',this.value)`)}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:6px">
+          ${inp('EDP',lct.instalacao_edp,`setSub('${u.id}','locatario','instalacao_edp',this.value)`)}
+          ${inp('CESAN',lct.matricula_cesan,`setSub('${u.id}','locatario','matricula_cesan',this.value)`)}
+          ${inp('Cotas de Água',lct.cotas_agua||1,`setSub('${u.id}','locatario','cotas_agua',this.value)`,'number')}
+        </div>
+        ${imovExtHtml}
+        <button class="add-campo-btn" onclick="addImovExtra('${u.id}')">+ Campo do contrato/imóvel</button>
+
+        ${sec('Proprietário')}
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:6px">
+          ${inp('Nome',loc.nome,`setSub('${u.id}','locador','nome',this.value)`)}
+          ${inp('CPF',loc.cpf,`setSub('${u.id}','locador','cpf',this.value)`)}
+          ${inp('Telefone',loc.tel,`setSub('${u.id}','locador','tel',this.value)`)}
+        </div>
+        ${locExtHtml}
+        <button class="add-campo-btn" onclick="addSubExtra('${u.id}','locador')">+ Campo do proprietário</button>
+      </div>
+
+      <div style="padding:18px 20px">
+        ${sec('Lançamentos — '+labelMes(mesSel))}
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+          ${num('Aluguel',vA,`setValor('${u.id}','aluguel',this.value)`)}
+          ${num('Condomínio',vC,`setValor('${u.id}','condominio',this.value)`)}
+          ${num('Água',vAg,`setMes('${u.id}','agua_valor',this.value)`)}
+          ${num('IPTU',vIP,`setMes('${u.id}','iptu',this.value)`)}
+          ${num('Taxa de Lixo',vLx,`setMes('${u.id}','lixo',this.value)`)}
+          ${num('Outros',vOt,`setMes('${u.id}','outros',this.value)`)}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+          ${sel('Energia',[{v:'transferida',l:'Transferida (direto)'},{v:'percentual',l:'% da conta'}],u.energia_tipo,`setValor('${u.id}','energia_tipo',this.value)`)}
+          ${u.energia_tipo==='percentual'
+            ?inp('% da Conta',u.energia_pct||0,`setValor('${u.id}','energia_pct',this.value)`,'number')
+            :`<div style="display:flex;align-items:flex-end;padding-bottom:8px"><span style="font-size:12px;color:#aaa">Conta transferida ao morador</span></div>`}
+        </div>
+        ${u.energia_tipo==='percentual'&&vEn>0?`<div style="background:#fef3c7;border-radius:8px;padding:8px 12px;font-size:13px;color:${CK};font-weight:600;margin-bottom:10px">⚡ Valor calculado: R$ ${fmtR(vEn)}</div>`:''}
+        ${extHtml}
+        ${!trav?`<button onclick="adicionarExtra('${u.id}')" class="add-campo-btn">+ Adicionar item extra (com valor)</button>`:''}
+        ${camposExtHtml}
+        ${!trav?`<button onclick="addCampoExtMes('${u.id}')" class="add-campo-btn" style="margin-top:4px">+ Campo livre neste mês</button>`:''}
+
+        <div style="display:flex;justify-content:space-between;align-items:center;background:#fef9ee;border-radius:10px;padding:10px 14px;margin:14px 0">
+          <span style="font-size:13px;font-weight:700;color:#333">TOTAL DO MÊS</span>
+          <span style="font-size:20px;font-weight:700;color:${CK};white-space:nowrap">R$ ${fmtR(total)}</span>
+        </div>
+        ${sec('Pagamentos Recebidos')}
+        ${pagHtml}
+        ${!trav?`<button onclick="adicionarPagamento('${u.id}')" class="add-campo-btn">+ Adicionar pagamento</button>`:''}
+        <div style="border-radius:10px;padding:10px 14px;margin-top:10px;background:${quitado?'#e8f5ee':'#fff5f5'};display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:13px;font-weight:700;color:${quitado?'#1a6b4a':'#c62828'}">${quitado?'✓ QUITADO':'Saldo em aberto'}</div>
+            <div style="font-size:11px;color:#999;margin-top:2px">Recebido: R$ ${fmtR(totalPago)}</div>
+          </div>
+          <span style="font-size:20px;font-weight:700;color:${quitado?'#1a6b4a':'#c62828'};white-space:nowrap">R$ ${fmtR(saldo)}</span>
+        </div>
+        ${sec('🔐 Caução — parcelas pagas')}
+        ${cauHtml}
+        ${!trav?`<button onclick="addCaucao('${u.id}')" class="add-campo-btn">+ Lançar pagamento de caução</button>`:''}
+        <div style="border-radius:10px;padding:10px 14px;margin-top:10px;background:${cau.comb>0&&cau.saldo<=0?'#e8f5ee':'#f8fafc'};font-size:12px;color:#444;line-height:1.7">
+          Combinado: <strong>R$ ${fmtR(cau.comb)}</strong> · Pago: <strong>R$ ${fmtR(cau.pago)}</strong> · ${cau.saldo>0?`<span style="color:#b45309;font-weight:700">Saldo a pagar: R$ ${fmtR(cau.saldo)}</span>`:(cau.comb>0?'<span style="color:#166534;font-weight:700">✓ Caução completa</span>':'Sem valor de caução definido')}
+          <div style="color:#888;font-size:11px">A caução fica depositada em conta corrente e não entra na receita nem na divisão.</div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ===== PAINEL =====
+function renderPainel(area){
+  let tG=0,rG=0,linhas='';
+  dados.unidades.forEach(u=>{
+    const m=dados.meses[`${u.id}__${mesSel}`]||{};
+    const t=calcTotal(u,m);if(!t)return;
+    const pags=(m.pagamentos||[]).reduce((s,pg)=>s+(parseFloat(pg.valor)||0),0);
+    const pg=pags>0?pags:(m.quitado?t:(parseFloat(m.pago)||0));
+    tG+=t;rG+=pg;
+    const st=pg>=t&&t>0?`<span style="color:var(--vd);font-weight:600">✓ Pago</span>`:pg>0?`<span style="color:var(--am);font-weight:600">Parcial — falta R$ ${fmtR(t-pg)}</span>`:`<span style="color:var(--vm);font-weight:600">Em aberto</span>`;
+    linhas+=`<div class="painel-linha"><span>${u.numero} — ${u.locatario&&u.locatario.nome||'—'}</span>${st}</div>`;
+  });
+  const pct=tG>0?Math.round(rG/tG*100):0;
+  area.innerHTML=`
+  <div style="font-size:20px;font-weight:700;color:${COR};margin-bottom:20px">📊 Painel — ${labelMes(mesSel)}</div>
+  <div class="rgrid">
+    <div class="rcard"><div class="rcard-lbl">Total Geral</div><div class="rcard-val">R$ ${fmtR(tG)}</div></div>
+    <div class="rcard"><div class="rcard-lbl">Recebido</div><div class="rcard-val" style="color:var(--vd)">R$ ${fmtR(rG)}</div></div>
+    <div class="rcard"><div class="rcard-lbl">A Receber</div><div class="rcard-val" style="color:var(--vm)">R$ ${fmtR(tG-rG)}</div></div>
+    <div class="rcard"><div class="rcard-lbl">Desempenho</div><div class="rcard-val">${pct}%</div><div class="barra"><div class="bfill" style="width:${pct}%"></div></div></div>
+  </div>
+  <div class="fech-card">
+    <div style="font-size:15px;font-weight:700;color:${COR};margin-bottom:12px">🌻 ${dados.cond.nome} — ${labelMes(mesSel)}</div>
+    <div class="barra"><div class="bfill" style="width:${pct}%"></div></div>
+    <div style="font-size:12px;color:#6b7280;margin-bottom:12px">${pct}% · R$ ${fmtR(rG)} de R$ ${fmtR(tG)}</div>
+    ${linhas||'<div style="color:#aaa;font-size:13px">Nenhum lançamento neste mês.</div>'}
+  </div>`;
+}
+
+// ===== FECHAMENTO =====
+function calcFech(mes){
+  const pc=dados.meses[`cond_cfg__${mes}`]||{};
+  const fu=dados.meses[`fundo_${mes}`]||{};
+  const despList=pc.despesas||[];
+  let rAlug=0,rCond=0,rAgua=0,rEn=0,rIPTU=0,rLixo=0,rOut=0,rExt=0,totalRec=0,totalInad=0,cauMes=0,cauTotal=0;
+  dados.unidades.forEach(u=>{
+    const m=dados.meses[`${u.id}__${mes}`]||{};
+    const pags=(m.pagamentos||[]).reduce((s,pg)=>s+(parseFloat(pg.valor)||0),0);
+    const tU=calcTotal(u,m);
+    const recU=pags>0?pags:(m.quitado?tU:(parseFloat(m.pago)||0));
+    const prop=(tU>0&&recU>0)?Math.min(recU/tU,1):0;
+    totalRec+=recU;totalInad+=Math.max(0,tU-recU);
+    rAlug+=(parseFloat(u.aluguel)||0)*prop;
+    rCond+=(parseFloat(u.condominio)||0)*prop;
+    rAgua+=(parseFloat(m.agua_valor)||0)*prop;
+    if(u.energia_tipo==='percentual')rEn+=(parseFloat(m.energia_valor)||0)*prop;
+    rIPTU+=(parseFloat(m.iptu)||0)*prop;
+    rLixo+=(parseFloat(m.lixo)||0)*prop;
+    rOut+=(parseFloat(m.outros)||0)*prop;
+    const exts=(m.extras||[]).reduce((s,e)=>s+(parseFloat(e.valor)||0),0);
+    const cext=(m.campos_extras||[]).reduce((s,e)=>s+(parseFloat(e.valor)||0),0);
+    rExt+=(exts+cext)*prop;
+    const ci=caucaoInfo(u);cauTotal+=ci.pago;
+    ci.arr.forEach(x=>{if((x.data||'').slice(0,7)===mes)cauMes+=parseFloat(x.valor)||0;});
+  });
+  const aguaE=aguaEdif(pc);
+  const totalDesp=aguaE+despList.reduce((s,d)=>s+(parseFloat(d.valor)||0),0);
+  const saldoAnt=parseFloat(fu.saldo_ant)||0;
+  const totalDisp=rCond+saldoAnt;
+  const saldoCond=totalDisp-totalDesp;
+  return{pc,fu,despList,rAlug,rCond,rAgua,rEn,rIPTU,rLixo,rOut,rExt,totalRec,totalInad,aguaE,totalDesp,saldoAnt,totalDisp,saldoCond,cauMes,cauTotal};
+}
+function proxMes(m){const[y,mo]=m.split('-').map(Number);const d=new Date(y,mo,1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;}
+function replicarSaldo(sim){
+  const f=calcFech(mesSel);
+  const nx=proxMes(mesSel);
+  const k=`fundo_${mesSel}`,kn=`fundo_${nx}`;
+  if(!dados.meses[k])dados.meses[k]={};
+  if(sim){
+    const inp=document.getElementById('repl-valor');
+    const v=inp?(parseFloat(inp.value)||0):f.saldoCond;
+    if(!dados.meses[kn])dados.meses[kn]={};
+    dados.meses[kn].saldo_ant=Math.round(v*100)/100;
+    dados.meses[kn].origem=mesSel;
+    dados.meses[k].decisao='sim';dados.meses[k].repl_valor=Math.round(v*100)/100;
+    toast(`✓ Saldo de R$ ${fmtR(v)} replicado para ${labelMes(nx)}`);
+  }else{
+    dados.meses[k].decisao='nao';
+    if(dados.meses[kn]){dados.meses[kn].saldo_ant=0;dados.meses[kn].origem='';}
+    toast('Saldo não replicado.');
+  }
+  sv();renderContent();
+}
+function desfazerReplica(){
+  const nx=proxMes(mesSel),k=`fundo_${mesSel}`,kn=`fundo_${nx}`;
+  if(dados.meses[k])delete dados.meses[k].decisao;
+  if(dados.meses[kn]&&dados.meses[kn].origem===mesSel){dados.meses[kn].saldo_ant=0;dados.meses[kn].origem='';}
+  sv();renderContent();
+}
+function setSaldoAnt(val){const k=`fundo_${mesSel}`;if(!dados.meses[k])dados.meses[k]={};dados.meses[k].saldo_ant=parseFloat(val)||0;sv();renderContent();}
+function setAguaEdif(val){const k=`cond_cfg__${mesSel}`;if(!dados.meses[k])dados.meses[k]={};if(val==='')delete dados.meses[k].agua_edif;else dados.meses[k].agua_edif=parseFloat(val)||0;sv();renderContent();}
+
+function renderFechamento(area){
+  const prevMes=mesPrev(mesSel),nxMes=proxMes(mesSel);
+  const f=calcFech(mesSel);
+  const {despList,rAlug,rCond,rAgua,rEn,rIPTU,rLixo,rOut,rExt,totalRec,totalInad,aguaE,totalDesp,saldoAnt,totalDisp,saldoCond,fu}=f;
+  const prev=calcFech(prevMes);
+  const prevDec=(dados.meses[`fundo_${prevMes}`]||{}).decisao;
+  const avisoPrev=(saldoAnt===0&&!prevDec&&prev.saldoCond>0.004)?`<div style="padding:8px 16px;background:#fff8e1;font-size:12px;color:#795548;border-bottom:1px solid #f0f0f0">⚠️ ${labelMes(prevMes)} fechou com saldo de R$ ${fmtR(prev.saldoCond)} que ainda não foi replicado. Abra o fechamento de ${labelMes(prevMes)} para decidir.</div>`:'';
+  const origem=fu.origem?` (vindo de ${labelMes(fu.origem)})`:` (${labelMes(prevMes)})`;
+  const metade=Math.round(rAlug*50)/100;
+
+  const S='padding:6px 16px;font-size:13px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center';
+  const row=(label,val,corV='#333',bold=false,neg=false,bg='transparent',mostraZero=false)=>
+    (val>0||mostraZero)?`<div style="${S};background:${bg}"><span style="color:#444;font-weight:${bold?'600':'400'}">${label}</span><span style="color:${corV};font-weight:${bold?'700':'500'};margin-left:24px;white-space:nowrap">${neg?'− ':''}R$ ${fmtR(val)}</span></div>`:'';
+  const sec=label=>`<div style="padding:5px 16px 3px;font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.8px;background:#f7f7f7;border-bottom:1px solid #eee">${label}</div>`;
+  const box='background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden';
+  const head=t=>`<div style="background:${COR};padding:10px 16px"><span style="font-size:15px;font-weight:700;color:#fff">${t}</span><span style="font-size:12px;color:rgba(255,255,255,.75);margin-left:8px">— ${labelMes(mesSel)}</span></div>`;
+  const inpV=(v,oc)=>`<div style="display:flex;align-items:center;border:1px solid #e0e0e0;border-radius:5px;overflow:hidden"><span style="padding:2px 5px;font-size:10px;color:#aaa;background:#f5f5f5;border-right:1px solid #e0e0e0">R$</span><input type="number" step="0.01" value="${v}" onchange="${oc}" style="width:90px;padding:2px 6px;border:none;outline:none;font-size:13px;text-align:right"></div>`;
+
+  const despHTML=despList.map((d,idx)=>`
+    <div style="${S}">
+      <input value="${esc(d.nome||'')}" onchange="setDespFech(${idx},'nome',this.value)" placeholder="Descrição da despesa"
+        style="flex:1;min-width:0;border:none;outline:none;font-size:13px;color:#444;background:transparent">
+      <div style="display:flex;align-items:center;gap:8px;margin-left:16px">
+        ${inpV(d.valor||0,`setDespFech(${idx},'valor',this.value)`)}
+        <button onclick="remDespFech(${idx})" style="border:none;background:none;color:#e53935;font-size:16px;cursor:pointer">×</button>
+      </div>
+    </div>`).join('');
+
+  const resultado=totalRec-totalDesp;
+  const ovr=(f.pc.agua_edif!==undefined&&f.pc.agua_edif!==null&&f.pc.agua_edif!=='');
+  const proxDec=fu.decisao;
+  let replBox='';
+  if(proxDec==='sim')replBox=`<div class="alerta" style="background:#e8f5ee;border-color:#86efac"><span>✓</span><span>Saldo de <strong>R$ ${fmtR(fu.repl_valor)}</strong> replicado para ${labelMes(nxMes)}.</span><button onclick="desfazerReplica()" style="margin-left:auto;padding:5px 12px;border:1px solid #16a34a;background:#fff;color:#166534;border-radius:6px;font-size:12px;cursor:pointer">Desfazer</button></div>`;
+  else if(proxDec==='nao')replBox=`<div class="alerta"><span>ℹ️</span><span>Saldo <strong>não</strong> replicado para ${labelMes(nxMes)}.</span><button onclick="desfazerReplica()" style="margin-left:auto;padding:5px 12px;border:1px solid #d97706;background:#fff;color:#92400e;border-radius:6px;font-size:12px;cursor:pointer">Decidir de novo</button></div>`;
+  else if(saldoCond>0.004)replBox=`<div class="alerta" style="background:#fff3cd;border:2px solid #f59e0b;font-size:14px;flex-wrap:wrap"><span style="font-size:20px">💰</span><span style="flex:1;min-width:220px"><strong>Replicar este saldo para o próximo mês?</strong><br><span style="font-size:12px;color:#6b7280">Saldo em caixa de ${labelMes(mesSel)} → entra como "(+) Saldo anterior" em ${labelMes(nxMes)}.</span></span><div style="display:flex;align-items:center;gap:8px"><div style="display:flex;align-items:center;border:1px solid #e0e0e0;border-radius:6px;overflow:hidden;background:#fff"><span style="padding:5px 6px;font-size:11px;color:#aaa;background:#fafafa;border-right:1px solid #e0e0e0">R$</span><input id="repl-valor" type="number" step="0.01" value="${saldoCond.toFixed(2)}" style="width:100px;padding:5px 8px;border:none;outline:none;font-size:14px"></div><button onclick="replicarSaldo(true)" style="padding:7px 16px;background:#16a34a;color:#fff;border:none;border-radius:7px;font-weight:700;cursor:pointer">Sim</button><button onclick="replicarSaldo(false)" style="padding:7px 16px;background:#e2e8f0;color:#333;border:none;border-radius:7px;font-weight:600;cursor:pointer">Não</button></div></div>`;
+
+  area.innerHTML=`
+  <div style="font-size:18px;font-weight:700;color:${COR};margin-bottom:16px">📈 Fechamento — ${labelMes(mesSel)}</div>
+  <div class="rgrid">
+    <div class="rcard"><div class="rcard-lbl">Total Recebido</div><div class="rcard-val" style="color:var(--vd)">R$ ${fmtR(totalRec)}</div></div>
+    <div class="rcard"><div class="rcard-lbl">Inadimplência</div><div class="rcard-val" style="color:var(--vm)">R$ ${fmtR(totalInad)}</div></div>
+    <div class="rcard"><div class="rcard-lbl">Despesas do Prédio</div><div class="rcard-val" style="color:var(--vm)">R$ ${fmtR(totalDesp)}</div></div>
+    <div class="rcard"><div class="rcard-lbl">Saldo em Caixa</div><div class="rcard-val" style="color:${saldoCond>=0?'var(--vd)':'var(--vm)'}">R$ ${fmtR(saldoCond)}</div></div>
+  </div>
+  ${replBox}
+  <div class="fech-grid">
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div style="${box}">
+        ${head('🌻 Recebimentos')}
+        ${row('Aluguel recebido',rAlug,'#1a6b4a')}
+        ${row('Condomínio recebido',rCond,'#1a6b4a')}
+        ${row('Água recebida (paga a conta de água)',rAgua,'#1a6b4a')}
+        ${row('Energia recebida',rEn,'#1a6b4a')}
+        ${row('IPTU recebido',rIPTU,'#1a6b4a')}
+        ${row('Taxa de Lixo recebida',rLixo,'#1a6b4a')}
+        ${row('Extras recebidos',rExt,'#1a6b4a')}
+        ${row('Outros recebidos',rOut,'#1a6b4a')}
+        ${row('Total recebido',totalRec,'#1a6b4a',true,false,'#f0f9f4',true)}
+        ${totalInad>0?row('Inadimplência (a receber)',totalInad,'#c62828',true,false,'#fff5f5'):''}
+      </div>
+      <div style="${box}">
+        ${head('🏠 Aluguéis — divisão')}
+        ${row('Aluguéis recebidos (com baixa)',rAlug,'#1a6b4a',true,false,'#f0f9f4',true)}
+        <div style="${S}"><span style="color:#444">Regina Medeiros — 50%</span><span style="font-weight:700;color:#1a6b4a">R$ ${fmtR(metade)}</span></div>
+        <div style="${S}"><span style="color:#444">Afrânio Melo — 50%</span><span style="font-weight:700;color:#1a6b4a">R$ ${fmtR(rAlug-metade)}</span></div>
+        ${sec('Caução (informativo)')}
+        <div style="${S}"><span style="color:#444">Caução recebida neste mês</span><span style="font-weight:600">R$ ${fmtR(f.cauMes)}</span></div>
+        <div style="${S}"><span style="color:#444">Caução total depositada em conta corrente</span><span style="font-weight:600">R$ ${fmtR(f.cauTotal)}</span></div>
+        <div style="padding:6px 16px;font-size:11px;color:#888">Caução não entra na receita nem na divisão.</div>
+      </div>
+    </div>
+    <div style="${box}">
+      ${head('💼 Caixa do Condomínio')}
+      ${avisoPrev}
+      ${sec('Entradas')}
+      ${row('Condomínio recebido',rCond,'#1a6b4a',false,false,'transparent',true)}
+      <div style="${S}"><span style="color:#444">(+) Saldo anterior<span style="color:#888;font-size:11px">${origem}</span></span>${inpV(saldoAnt,'setSaldoAnt(this.value)')}</div>
+      ${row('Total disponível',totalDisp,'#1a6b4a',true,false,'#f0f9f4',true)}
+      ${sec('Despesas do prédio')}
+      <div style="${S};background:#fffdf5">
+        <span style="color:#444">💧 Água do edifício <span style="color:#888;font-size:11px">(cota do condomínio${ovr?' — valor alterado':' — automática'})</span></span>
+        <div style="display:flex;align-items:center;gap:6px">${inpV(aguaE.toFixed(2),'setAguaEdif(this.value)')}${ovr?`<button title="Voltar ao automático" onclick="setAguaEdif('')" style="border:none;background:none;cursor:pointer;font-size:14px">↺</button>`:''}</div>
+      </div>
+      ${despHTML}
+      <div style="padding:8px 16px;border-bottom:1px solid #f0f0f0">
+        <button onclick="addDespFech()" style="font-size:12px;color:${COR};background:none;border:1px dashed ${COR};border-radius:6px;padding:5px 14px;cursor:pointer;font-weight:600;width:100%">+ Adicionar despesa</button>
+      </div>
+      ${row('Total de despesas',totalDesp,'#c62828',true,true,'#fff5f5',true)}
+      <div style="${S};background:${saldoCond>=0?'#e8f5ee':'#fff5f5'}">
+        <span style="font-size:14px;font-weight:700;color:${saldoCond>=0?'#1a6b4a':'#c62828'}">Saldo em caixa</span>
+        <span style="font-size:14px;font-weight:700;color:${saldoCond>=0?'#1a6b4a':'#c62828'};white-space:nowrap">R$ ${fmtR(saldoCond)}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function addDespFech(){const k=`cond_cfg__${mesSel}`;if(!dados.meses[k])dados.meses[k]={};if(!dados.meses[k].despesas)dados.meses[k].despesas=[];dados.meses[k].despesas.push({nome:'',valor:0});sv();renderContent();}
+function remDespFech(idx){const k=`cond_cfg__${mesSel}`;if(!dados.meses[k]||!dados.meses[k].despesas)return;dados.meses[k].despesas.splice(idx,1);sv();renderContent();}
+function setDespFech(idx,campo,val){const k=`cond_cfg__${mesSel}`;if(!dados.meses[k]||!dados.meses[k].despesas)return;dados.meses[k].despesas[idx][campo]=campo==='valor'?(parseFloat(val)||0):val;sv();}
+
+// ===== OPERAÇÕES DE DADOS =====
+function setSub(unidId,sub,campo,val){const u=dados.unidades.find(x=>x.id===unidId);if(!u)return;if(!u[sub])u[sub]={};u[sub][campo]=val;sv();}
+function setValor(unidId,campo,val){const u=dados.unidades.find(x=>x.id===unidId);if(!u)return;u[campo]=campo==='energia_pct'?(parseFloat(val)||0):val;sv();if(campo==='energia_tipo'||campo==='energia_pct')renderContent();}
+function setMes(unidId,campo,val){const mk=`${unidId}__${mesSel}`;if(!dados.meses[mk])dados.meses[mk]={};dados.meses[mk][campo]=parseFloat(val)||0;sv();}
+function adicionarPagamento(unidId){const mk=`${unidId}__${mesSel}`;if(!dados.meses[mk])dados.meses[mk]={};if(!dados.meses[mk].pagamentos)dados.meses[mk].pagamentos=[];dados.meses[mk].pagamentos.push({data:new Date().toISOString().split('T')[0],valor:0});sv();renderContent();}
+function removerPagamento(unidId,idx){const mk=`${unidId}__${mesSel}`;if(!dados.meses[mk]||!dados.meses[mk].pagamentos)return;dados.meses[mk].pagamentos.splice(idx,1);sv();renderContent();}
+function setPagamento(unidId,idx,campo,val){const mk=`${unidId}__${mesSel}`;if(!dados.meses[mk]||!dados.meses[mk].pagamentos)return;dados.meses[mk].pagamentos[idx][campo]=campo==='valor'?(parseFloat(val)||0):val;sv();}
+function adicionarExtra(unidId){const mk=`${unidId}__${mesSel}`;if(!dados.meses[mk])dados.meses[mk]={};if(!dados.meses[mk].extras)dados.meses[mk].extras=[];dados.meses[mk].extras.push({nome:'',valor:0});sv();renderContent();}
+function removerExtra(unidId,idx){const mk=`${unidId}__${mesSel}`;if(!dados.meses[mk]||!dados.meses[mk].extras)return;dados.meses[mk].extras.splice(idx,1);sv();renderContent();}
+function setExtra(unidId,idx,campo,val){const mk=`${unidId}__${mesSel}`;if(!dados.meses[mk]||!dados.meses[mk].extras)return;dados.meses[mk].extras[idx][campo]=campo==='valor'?(parseFloat(val)||0):val;sv();}
+// Campos extras livres do mês
+function addCampoExtMes(unidId){const mk=`${unidId}__${mesSel}`;if(!dados.meses[mk])dados.meses[mk]={};if(!dados.meses[mk].campos_extras)dados.meses[mk].campos_extras=[];dados.meses[mk].campos_extras.push({label:'',valor:''});sv();renderContent();}
+function remCampoExtMes(unidId,idx){const mk=`${unidId}__${mesSel}`;if(!dados.meses[mk]||!dados.meses[mk].campos_extras)return;dados.meses[mk].campos_extras.splice(idx,1);sv();renderContent();}
+function setCampoExtMes(unidId,idx,campo,val){const mk=`${unidId}__${mesSel}`;if(!dados.meses[mk]||!dados.meses[mk].campos_extras)return;dados.meses[mk].campos_extras[idx][campo]=val;sv();}
+// Extras de sub (locatario/locador)
+function addSubExtra(unidId,sub){const u=dados.unidades.find(x=>x.id===unidId);if(!u)return;if(!u[sub])u[sub]={};if(!u[sub].extras)u[sub].extras=[];u[sub].extras.push({label:'',valor:''});sv();renderContent();}
+function remSubExtra(unidId,sub,idx){const u=dados.unidades.find(x=>x.id===unidId);if(!u||!u[sub]||!u[sub].extras)return;u[sub].extras.splice(idx,1);sv();renderContent();}
+function setSubExtra(unidId,sub,idx,campo,val){const u=dados.unidades.find(x=>x.id===unidId);if(!u||!u[sub]||!u[sub].extras)return;u[sub].extras[idx][campo]=val;sv();}
+// Extras imóvel/contrato
+function addImovExtra(unidId){const u=dados.unidades.find(x=>x.id===unidId);if(!u)return;if(!u.extras_imovel)u.extras_imovel=[];u.extras_imovel.push({label:'',valor:''});sv();renderContent();}
+function remImovExtra(unidId,idx){const u=dados.unidades.find(x=>x.id===unidId);if(!u||!u.extras_imovel)return;u.extras_imovel.splice(idx,1);sv();renderContent();}
+function setImovExtra(unidId,idx,campo,val){const u=dados.unidades.find(x=>x.id===unidId);if(!u||!u.extras_imovel)return;u.extras_imovel[idx][campo]=val;sv();}
+
+// ===== CAMPOS EXTRAS CONDOMÍNIO =====
+function addCampoExtra(ctx){
+  if(ctx==='cond'){if(!dados.cond.extras)dados.cond.extras=[];dados.cond.extras.push({label:'',valor:''});sv();renderCondExtras();}
+}
+function remCondExtra(idx){dados.cond.extras.splice(idx,1);sv();renderCondExtras();}
+function setCondExtra(idx,campo,val){dados.cond.extras[idx][campo]=val;sv();}
+function renderCondExtras(){
+  const lista=document.getElementById('cond-extras-lista');if(!lista)return;
+  lista.innerHTML=(dados.cond.extras||[]).map((e,i)=>
+    `<div class="campo-extra-row">
+      <div style="display:flex;flex-direction:column;gap:3px"><label style="font-size:11px;color:#555;font-weight:600">Campo</label>
+        <input value="${esc(e.label||'')}" onchange="setCondExtra(${i},'label',this.value)" placeholder="Nome do campo"
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%"></div>
+      <div style="display:flex;flex-direction:column;gap:3px"><label style="font-size:11px;color:#555;font-weight:600">Valor</label>
+        <input value="${esc(String(e.valor||''))}" onchange="setCondExtra(${i},'valor',this.value)" placeholder="Valor"
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%"></div>
+      <button onclick="remCondExtra(${i})" style="padding:7px 10px;background:#ffebee;color:#c62828;border:none;border-radius:7px;cursor:pointer;font-size:14px;align-self:end">×</button>
+    </div>`
+  ).join('');
+}
+
+// ===== MODAIS =====
+function abrirModalUnidade(){document.getElementById('mu-numero').value='';document.getElementById('modal-unidade').classList.add('aberto');}
+function salvarNovaUnidade(){const num=document.getElementById('mu-numero').value.trim();if(!num){alert('Digite o número!');return;}dados.unidades.push(criarUnidade(num));sv();renderContent();fecharModal('modal-unidade');toast('Unidade adicionada!');}
+function excluirUnidade(unidId){abrirModalSenha(()=>{if(!confirm('Excluir esta unidade? Ação irreversível!'))return;dados.unidades=dados.unidades.filter(u=>u.id!==unidId);sv();renderContent();toast('Unidade excluída!');});}
+function toggleTrava(unidId){const mk=`${unidId}__${mesSel}`;if(!dados.meses[mk])dados.meses[mk]={};dados.meses[mk].travado=!dados.meses[mk].travado;sv();renderContent();toast(dados.meses[mk].travado?'🔒 Travado!':'🔓 Destravado!');}
+function destravaTudo(){if(!confirm('Destravar todos os cards?'))return;Object.keys(dados.meses).forEach(k=>{if(dados.meses[k]&&dados.meses[k].travado!==undefined)dados.meses[k].travado=false;});sv();renderContent();toast('✓ Tudo destravado!');}
+function fecharModal(id){document.getElementById(id).classList.remove('aberto');}
+function abrirModalSenha(cb){_cbSenha=cb;document.getElementById('modal-senha-input').value='';document.getElementById('modal-senha-erro').style.display='none';document.getElementById('modal-senha').classList.add('aberto');setTimeout(()=>document.getElementById('modal-senha-input').focus(),100);}
+function confirmarSenha(){const s=document.getElementById('modal-senha-input').value;if(s===SENHA){fecharModal('modal-senha');if(_cbSenha)_cbSenha();_cbSenha=null;}else{document.getElementById('modal-senha-erro').style.display='block';document.getElementById('modal-senha-input').value='';}}
+
+function abrirModalCond(){
+  const c=dados.cond||{};
+  document.getElementById('mc-nome').value=c.nome||'Condomínio Girassol';
+  document.getElementById('mc-end').value=c.endereco||'';
+  document.getElementById('mc-cnpj').value=c.cnpj||'';
+  document.getElementById('mc-sindico').value=c.sindico||'';
+  document.getElementById('mc-sindico-cpf').value=c.sindicoCpf||'';
+  document.getElementById('mc-tel').value=c.tel||'';
+  document.getElementById('mc-email').value=c.email||'';
+  document.getElementById('mc-pix').value=c.pix||'';
+  document.getElementById('mc-banco').value=c.banco||'';
+  renderCondExtras();
+  document.getElementById('modal-cond').classList.add('aberto');
+}
+function salvarDadosCond(){
+  dados.cond={
+    ...dados.cond,
+    nome:document.getElementById('mc-nome').value.trim()||'Condomínio Girassol',
+    endereco:document.getElementById('mc-end').value.trim(),
+    cnpj:document.getElementById('mc-cnpj').value.trim(),
+    sindico:document.getElementById('mc-sindico').value.trim(),
+    sindicoCpf:document.getElementById('mc-sindico-cpf').value.trim(),
+    tel:document.getElementById('mc-tel').value.trim(),
+    email:document.getElementById('mc-email').value.trim(),
+    pix:document.getElementById('mc-pix').value.trim(),
+    banco:document.getElementById('mc-banco').value.trim(),
+  };
+  sv();atualizarHeaderEnd();fecharModal('modal-cond');toast('✓ Dados salvos!');
+}
+
+// ===== CONTRATO =====
+function abrirContrato(unidId){
+  const u=dados.unidades.find(x=>x.id===unidId);if(!u)return;
+  const lct=u.locatario||{};
+  const aluguel=parseFloat(u.aluguel)||0,cond=parseFloat(u.condominio)||0;
+  document.getElementById('modal-doc-titulo').textContent=`📋 Revisar Contrato — ${u.numero}`;
+  document.getElementById('modal-doc-body').innerHTML=`
+    <p style="color:#6b7280;font-size:13px;margin-bottom:14px">Revise os dados antes de gerar o contrato.</p>
+    <div class="mc2">
+      <div class="mc"><label>Nome do Morador</label><input id="ct-nome" value="${esc(lct.nome||'')}"></div>
+      <div class="mc"><label>CPF</label><input id="ct-cpf" value="${esc(lct.cpf||'')}"></div>
+      <div class="mc"><label>RG</label><input id="ct-rg" value="${esc(lct.rg||'')}"></div>
+      <div class="mc"><label>E-mail</label><input id="ct-email" value="${esc(lct.email||'')}"></div>
+      <div class="mc"><label>Telefone</label><input id="ct-tel" value="${esc(lct.tel||'')}"></div>
+      <div class="mc"><label>Endereço de origem</label><input id="ct-end" value="${esc(lct.endereco||'')}"></div>
+      <div class="mc"><label>Data de Assinatura</label><input id="ct-assin" value="${esc(lct.data_assinatura||new Date().toLocaleDateString('pt-BR'))}"></div>
+      <div class="mc"><label>Vencimento do Contrato</label><input id="ct-venc" value="${esc(lct.vencimento_contrato||'')}"></div>
+      <div class="mc"><label>Aluguel (R$)</label><input id="ct-aluguel" type="number" step="0.01" value="${aluguel}"></div>
+      <div class="mc"><label>Condomínio (R$)</label><input id="ct-cond" type="number" step="0.01" value="${cond}"></div>
+      <div class="mc"><label>Caução (R$)</label><input id="ct-caucao" type="number" step="0.01" value="${parseFloat(lct.caucao_valor)||(aluguel*2)}"></div>
+      <div class="mc"><label>Cotas de Água</label><input id="ct-cotas" value="${esc(String(lct.cotas_agua||1))}"></div>
+      <div class="mc"><label>Total de Cotas do Cond.</label><input id="ct-totalcotas" value="22"></div>
+      <div class="mc"><label>Matrícula CESAN</label><input id="ct-cesan" value="${esc(lct.matricula_cesan||'')}"></div>
+      <div class="mc"><label>Instalação EDP</label><input id="ct-edp" value="${esc(lct.instalacao_edp||'')}"></div>
+      <div class="mc"><label>Animais domésticos</label><select id="ct-animais"><option value="nao">Não permitido</option><option value="sim">Sim — 1 cão de pequeno porte</option></select></div>
+      <div class="mc"><label>Chaves entregues</label><input id="ct-chaves" value="01 jogo de chaves"></div>
+      <div class="mc" style="grid-column:1/-1"><label>Observações adicionais</label><textarea id="ct-obs" rows="2">${esc(lct.obs||'')}</textarea></div>
+    </div>
+    <div id="ct-extras-lista" style="margin-top:10px"></div>
+    <button class="add-campo-btn" onclick="addCtExtra()">+ Campo adicional no contrato</button>
+    <div style="text-align:right;margin-top:14px">
+      <button class="bok" onclick="gerarContratoFinal('${unidId}')">📄 Gerar Contrato</button>
+    </div>`;
+  window._ctExtras=[];
+  renderCtExtras();
+  document.getElementById('modal-doc').classList.add('aberto');
+}
+function addCtExtra(){window._ctExtras=window._ctExtras||[];window._ctExtras.push({label:'',valor:''});renderCtExtras();}
+function remCtExtra(i){window._ctExtras.splice(i,1);renderCtExtras();}
+function renderCtExtras(){
+  const el=document.getElementById('ct-extras-lista');if(!el)return;
+  el.innerHTML=(window._ctExtras||[]).map((e,i)=>
+    `<div class="campo-extra-row">
+      <div style="display:flex;flex-direction:column;gap:3px"><label style="font-size:11px;color:#555;font-weight:600">Campo</label>
+        <input value="${esc(e.label)}" oninput="window._ctExtras[${i}].label=this.value" placeholder="Ex: Fiador, Garantia..."
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%"></div>
+      <div style="display:flex;flex-direction:column;gap:3px"><label style="font-size:11px;color:#555;font-weight:600">Valor</label>
+        <input value="${esc(String(e.valor))}" oninput="window._ctExtras[${i}].valor=this.value" placeholder="Valor"
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%"></div>
+      <button onclick="remCtExtra(${i})" style="padding:7px 10px;background:#ffebee;color:#c62828;border:none;border-radius:7px;cursor:pointer;font-size:14px;align-self:end">×</button>
+    </div>`
+  ).join('');
+}
+
+function gerarContratoFinal(unidId){
+  const u=dados.unidades.find(x=>x.id===unidId);if(!u)return;
+  const c=dados.cond||{};
+  const g=id=>{const el=document.getElementById(id);return el?el.value.trim():'';};
+  const nome=g('ct-nome'),cpf=g('ct-cpf'),rg=g('ct-rg'),email=g('ct-email'),tel=g('ct-tel'),endLct=g('ct-end');
+  const dataAssin=g('ct-assin')||new Date().toLocaleDateString('pt-BR'),vencContrato=g('ct-venc');
+  const aluguel=parseFloat(g('ct-aluguel'))||0,cond=parseFloat(g('ct-cond'))||0,total=aluguel+cond;
+  const caucao=parseFloat(g('ct-caucao'))||(aluguel*2);
+  const cotas=g('ct-cotas')||'1',totalCotas=g('ct-totalcotas')||'22';
+  const cesan=g('ct-cesan'),edp=g('ct-edp'),animais=g('ct-animais'),chaves=g('ct-chaves'),obs=g('ct-obs');
+  const hoje=new Date();
+  const diaStr=hoje.getDate(),mesStr=MN_PT[hoje.getMonth()],anoStr=hoje.getFullYear();
+  const pix=c.pix||'(a definir)';
+  const extrasHtml=(window._ctExtras||[]).filter(e=>e.label).map(e=>`<p><strong>${e.label}:</strong> ${e.valor}</p>`).join('');
+  const body=`<div class="doc" id="doc-inner">
+<h1>CONTRATO DE LOCAÇÃO RESIDENCIAL</h1>
+<p style="text-align:center;font-size:11px">Lei nº 8.245/1991 | Lei nº 10.406/2002 | Lei nº 13.709/2018 (LGPD)</p>
+<p><strong>CLÁUSULA PRIMEIRA — DAS PARTES</strong></p>
+<p><strong>Locador(a):</strong> ${c.sindico||'___________'}${c.sindicoCpf?', CPF '+c.sindicoCpf:''}.<br>
+<strong>Condomínio:</strong> ${c.nome||'Condomínio Girassol'}${c.cnpj?', CNPJ '+c.cnpj:''}${c.endereco?', '+c.endereco:''}.</p>
+<p><strong>Locatário(a):</strong> ${nome||'___________'}${cpf?', CPF '+cpf:''}${rg?', RG '+rg:''}.${email?'<br>E-mail: '+email:''}${tel?'. Tel: '+tel:''}${endLct?'<br>Endereço: '+endLct:''}</p>
+<p><strong>CLÁUSULA SEGUNDA — DO OBJETO</strong></p>
+<p>Imóvel: <strong>${c.nome||'Condomínio Girassol'} — ${u.numero}</strong>${c.endereco?', '+c.endereco:''}. Finalidade exclusivamente residencial.</p>
+<p><strong>CLÁUSULA TERCEIRA — DO PRAZO E VALORES</strong></p>
+<p>Prazo: 12 (doze) meses, de ${dataAssin}${vencContrato?' a '+vencContrato:''}. Renovação automática em caso de silêncio das partes.</p>
+<p>Aluguel: <strong>R$ ${fmtR(aluguel)} (${extenso(aluguel)})</strong>${cond>0?`, acrescido de condomínio de R$ ${fmtR(cond)} (${extenso(cond)}), totalizando R$ ${fmtR(total)} (${extenso(total)})`:''}.
+Pagamento até o dia 05 de cada mês. PIX: ${pix}.</p>
+<p>Multa por atraso: 10% + 1% a.m. + IPCA pro rata die.</p>
+${cesan?`<p>Água (matrícula CESAN ${cesan}): rateada proporcionalmente. Esta unidade responde por ${cotas} cota(s) de ${totalCotas} totais. Pagamento 02 dias antes do vencimento. SOB PENA DE QUEBRA DE CONTRATO.</p>`:''}
+${edp?`<p>Energia elétrica (EDP nº ${edp}): conta transferida para o nome do(a) Locatário(a) antes da mudança. SOB PENA DE QUEBRA DE CONTRATO.</p>`:''}
+<p>IPTU e Taxa de Lixo: pagos pelo(a) Locatário(a) nos vencimentos. SOB PENA DE QUEBRA DE CONTRATO.</p>
+${caucao>0?`<p>Caução: R$ ${fmtR(caucao)} (${extenso(caucao)}), pago à vista na assinatura. Devolvido em até 30 dias após entrega das chaves, corrigido pela poupança.</p>`:''}
+<p>Rescisão antecipada pelo(a) Locatário(a): multa de 2 aluguéis proporcional ao tempo restante. Reajuste anual: IGP-M ou valor de mercado.</p>
+${animais==='sim'?'<p>Fica autorizada a permanência de 01 cachorro de pequeno porte, desde que não perturbe a vizinhança e respeite as normas condominiais.</p>':''}
+<p><strong>CLÁUSULA QUARTA — DAS OBRIGAÇÕES DO(A) LOCATÁRIO(A)</strong></p>
+<p>O(A) Locatário(a) recebe o imóvel em perfeito estado. Compromete-se a conservá-lo, proibida a sublocação sem autorização escrita e quaisquer benfeitorias sem aprovação prévia. Pintura ao final: custo do(a) Locatário(a).</p>
+<p><strong>CLÁUSULA QUINTA — REGRAS DO CONDOMÍNIO</strong></p>
+<p>O(A) Locatário(a) declara conhecer e se compromete a cumprir integralmente a Convenção e o Regimento Interno do ${c.nome||'Condomínio Girassol'}. É proibida a posse ou comércio de substâncias ilícitas (Lei nº 11.343/2006).</p>
+<p><strong>CLÁUSULA SEXTA — MULTAS E FORO</strong></p>
+<p>Descumprimento: advertência; após 3ª infração, desocupação em 30 dias + multa de 2 aluguéis. Foro: Comarca de Vila Velha/ES.</p>
+${chaves?`<p>Chaves entregues: ${chaves}.</p>`:''}
+${obs?`<p>Observações: ${obs}</p>`:''}
+${extrasHtml}
+<p>As partes declaram ter lido e estar de acordo, firmado em 02 vias.</p>
+<p>Vila Velha/ES, ${diaStr} de ${mesStr} de ${anoStr}.</p>
+<div class="assinaturas">
+  <div class="ass">LOCADOR(A) / SÍNDICO(A):<br>${c.sindico||'___________________________'}${c.sindicoCpf?'<br>CPF: '+c.sindicoCpf:''}</div>
+  <div class="ass">LOCATÁRIO(A):<br>${nome||'___________________________'}${cpf?'<br>CPF: '+cpf:''}</div>
+  <div class="ass">TESTEMUNHA 1:<br>___________________________ CPF: _______________</div>
+  <div class="ass">TESTEMUNHA 2:<br>___________________________ CPF: _______________</div>
+</div>
+</div>`;
+  document.getElementById('modal-doc-titulo').textContent=`Contrato — ${u.numero}`;
+  document.getElementById('modal-doc-body').innerHTML=body;
+}
+
+// ===== NOTIFICAÇÃO =====
+function abrirNotificacao(unidId){
+  const u=dados.unidades.find(x=>x.id===unidId);if(!u)return;
+  const lct=u.locatario||{};const c=dados.cond||{};
+  const aluguel=parseFloat(u.aluguel)||0;
+  const hoje=new Date();
+  const vigencia=MN_UP[hoje.getMonth()]+' DE '+hoje.getFullYear();
+  document.getElementById('modal-doc-titulo').textContent=`📝 Notificação — ${u.numero}`;
+  document.getElementById('modal-doc-body').innerHTML=`
+    <p style="color:#6b7280;font-size:13px;margin-bottom:14px">Revise os dados antes de gerar.</p>
+    <div class="mc2">
+      <div class="mc"><label>Nome do Morador</label><input id="nt-nome" value="${esc(lct.nome||'')}"></div>
+      <div class="mc"><label>CPF</label><input id="nt-cpf" value="${esc(lct.cpf||'')}"></div>
+      <div class="mc"><label>Valor atual (R$)</label><input id="nt-atual" type="number" step="0.01" value="${aluguel}"></div>
+      <div class="mc"><label>Novo valor (R$)</label><input id="nt-novo" type="number" step="0.01" value="${aluguel}"></div>
+      <div class="mc"><label>Vigência do novo valor</label><input id="nt-vigencia" value="${vigencia}"></div>
+      <div class="mc"><label>Prazo para manifestação</label><input id="nt-prazo" value="24 (vinte e quatro) horas"></div>
+      <div class="mc" style="grid-column:1/-1"><label>Observações adicionais</label><textarea id="nt-obs" rows="2"></textarea></div>
+    </div>
+    <div id="nt-extras-lista" style="margin-top:10px"></div>
+    <button class="add-campo-btn" onclick="addNtExtra()">+ Campo adicional na notificação</button>
+    <div style="text-align:right;margin-top:14px">
+      <button class="bok" onclick="gerarNotificacaoFinal('${unidId}')">📄 Gerar Notificação</button>
+    </div>`;
+  window._ntExtras=[];renderNtExtras();
+  document.getElementById('modal-doc').classList.add('aberto');
+}
+function addNtExtra(){window._ntExtras=window._ntExtras||[];window._ntExtras.push({label:'',valor:''});renderNtExtras();}
+function remNtExtra(i){window._ntExtras.splice(i,1);renderNtExtras();}
+function renderNtExtras(){
+  const el=document.getElementById('nt-extras-lista');if(!el)return;
+  el.innerHTML=(window._ntExtras||[]).map((e,i)=>
+    `<div class="campo-extra-row">
+      <div style="display:flex;flex-direction:column;gap:3px"><label style="font-size:11px;color:#555;font-weight:600">Campo</label>
+        <input value="${esc(e.label)}" oninput="window._ntExtras[${i}].label=this.value" placeholder="Nome do campo"
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%"></div>
+      <div style="display:flex;flex-direction:column;gap:3px"><label style="font-size:11px;color:#555;font-weight:600">Valor</label>
+        <input value="${esc(String(e.valor))}" oninput="window._ntExtras[${i}].valor=this.value" placeholder="Valor"
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%"></div>
+      <button onclick="remNtExtra(${i})" style="padding:7px 10px;background:#ffebee;color:#c62828;border:none;border-radius:7px;cursor:pointer;font-size:14px;align-self:end">×</button>
+    </div>`
+  ).join('');
+}
+
+function gerarNotificacaoFinal(unidId){
+  const u=dados.unidades.find(x=>x.id===unidId);if(!u)return;
+  const c=dados.cond||{};
+  const g=id=>{const el=document.getElementById(id);return el?el.value.trim():'';};
+  const nome=g('nt-nome'),cpf=g('nt-cpf');
+  const valAtual=parseFloat(g('nt-atual'))||0,valNovo=parseFloat(g('nt-novo'))||0;
+  const vigencia=g('nt-vigencia'),prazo=g('nt-prazo'),obs=g('nt-obs');
+  const hoje=new Date();
+  const diaStr=hoje.getDate(),mesStr=MN_UP[hoje.getMonth()],anoStr=hoje.getFullYear();
+  const extrasHtml=(window._ntExtras||[]).filter(e=>e.label).map(e=>`<p><strong>${e.label}:</strong> ${e.valor}</p>`).join('');
+  const body=`<div class="doc" id="doc-inner">
+<h1>NOTIFICAÇÃO PARA RENOVAÇÃO DE CONTRATO DE LOCAÇÃO</h1>
+<p style="text-align:center;font-size:11px">Lei nº 8.245/1991 (Lei do Inquilinato)</p>
+<p>Vila Velha/ES, ${diaStr} de ${MN_PT[hoje.getMonth()]} de ${anoStr}.</p>
+<p><strong>REMETENTE:</strong> ${c.nome||'Condomínio Girassol'}${c.sindico?', representado pelo(a) Síndico(a) '+c.sindico:''}${c.sindicoCpf?', CPF '+c.sindicoCpf:''}.</p>
+<p><strong>DESTINATÁRIO(A):</strong> ${nome||'___________'}${cpf?', CPF '+cpf:''}.</p>
+<p><strong>IMÓVEL:</strong> ${c.nome||'Condomínio Girassol'} — <strong>${u.numero}</strong>${c.endereco?', '+c.endereco:''}.</p>
+<p>Comunicamos as condições para renovação do contrato de locação nos termos da Lei nº 8.245/1991.</p>
+<p>O valor atual do aluguel é de <strong>R$ ${fmtR(valAtual)} (${extenso(valAtual)})</strong>. Com o reajuste, o novo valor passará a ser <strong>R$ ${fmtR(valNovo)} (${extenso(valNovo)})</strong> a partir de ${vigencia}.</p>
+<p>Solicitamos manifestação em ${prazo}. O silêncio será interpretado como <strong>ACEITE TÁCITO</strong> das condições ora propostas.</p>
+${obs?`<p>${obs}</p>`:''}
+${extrasHtml}
+<p>Atenciosamente,<br><strong>${c.sindico||'Administração'}</strong><br>${c.nome||'Condomínio Girassol'}${c.tel?'<br>'+c.tel:''}</p>
+<div class="assinaturas" style="margin-top:40px">
+  <div class="ass">${c.nome||'Condomínio Girassol'}<br>${c.sindico||'Síndico(a)'}</div>
+  <div class="ass">${nome?'LOCATÁRIO(A): '+nome:'LOCATÁRIO(A): ___________________________'}</div>
+</div>
+</div>`;
+  document.getElementById('modal-doc-titulo').textContent=`Notificação — ${u.numero}`;
+  document.getElementById('modal-doc-body').innerHTML=body;
+}
+
+// ===== ADITIVO DE RENOVAÇÃO =====
+function abrirAditivo(unidId){
+  const u=dados.unidades.find(x=>x.id===unidId);if(!u)return;
+  const lct=u.locatario||{};const c=dados.cond||{};
+  const aluguel=parseFloat(u.aluguel)||0;
+  const hoje=new Date();
+  document.getElementById('modal-doc-titulo').textContent=`📄 Aditivo de Renovação — ${u.numero}`;
+  document.getElementById('modal-doc-body').innerHTML=`
+    <p style="color:#6b7280;font-size:13px;margin-bottom:14px">Preencha os dados do aditivo de renovação.</p>
+    <div class="mc2">
+      <div class="mc"><label>Nome do Morador</label><input id="ad-nome" value="${esc(lct.nome||'')}"></div>
+      <div class="mc"><label>CPF</label><input id="ad-cpf" value="${esc(lct.cpf||'')}"></div>
+      <div class="mc"><label>Data de assinatura do aditivo</label><input id="ad-assin" value="${hoje.toLocaleDateString('pt-BR')}"></div>
+      <div class="mc"><label>Novo vencimento do contrato</label><input id="ad-venc" value="" placeholder="Ex: DEZEMBRO DE 2026"></div>
+      <div class="mc"><label>Novo valor do aluguel (R$)</label><input id="ad-aluguel" type="number" step="0.01" value="${aluguel}"></div>
+      <div class="mc"><label>Novo valor do condomínio (R$)</label><input id="ad-cond" type="number" step="0.01" value="${parseFloat(u.condominio)||0}"></div>
+      <div class="mc"><label>Vigência do novo valor</label><input id="ad-vigencia" value="${MN_UP[hoje.getMonth()]} DE ${hoje.getFullYear()}"></div>
+      <div class="mc"><label>Índice de reajuste</label><input id="ad-indice" value="IGP-M"></div>
+      <div class="mc" style="grid-column:1/-1"><label>Observações / Condições especiais</label><textarea id="ad-obs" rows="3"></textarea></div>
+    </div>
+    <div id="ad-extras-lista" style="margin-top:10px"></div>
+    <button class="add-campo-btn" onclick="addAdExtra()">+ Campo adicional no aditivo</button>
+    <div style="text-align:right;margin-top:14px">
+      <button class="bok" onclick="gerarAditivoFinal('${unidId}')">📄 Gerar Aditivo</button>
+    </div>`;
+  window._adExtras=[];renderAdExtras();
+  document.getElementById('modal-doc').classList.add('aberto');
+}
+function addAdExtra(){window._adExtras=window._adExtras||[];window._adExtras.push({label:'',valor:''});renderAdExtras();}
+function remAdExtra(i){window._adExtras.splice(i,1);renderAdExtras();}
+function renderAdExtras(){
+  const el=document.getElementById('ad-extras-lista');if(!el)return;
+  el.innerHTML=(window._adExtras||[]).map((e,i)=>
+    `<div class="campo-extra-row">
+      <div style="display:flex;flex-direction:column;gap:3px"><label style="font-size:11px;color:#555;font-weight:600">Campo</label>
+        <input value="${esc(e.label)}" oninput="window._adExtras[${i}].label=this.value" placeholder="Nome do campo"
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%"></div>
+      <div style="display:flex;flex-direction:column;gap:3px"><label style="font-size:11px;color:#555;font-weight:600">Valor</label>
+        <input value="${esc(String(e.valor))}" oninput="window._adExtras[${i}].valor=this.value" placeholder="Valor"
+          style="padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;outline:none;width:100%"></div>
+      <button onclick="remAdExtra(${i})" style="padding:7px 10px;background:#ffebee;color:#c62828;border:none;border-radius:7px;cursor:pointer;font-size:14px;align-self:end">×</button>
+    </div>`
+  ).join('');
+}
+
+function gerarAditivoFinal(unidId){
+  const u=dados.unidades.find(x=>x.id===unidId);if(!u)return;
+  const c=dados.cond||{};
+  const g=id=>{const el=document.getElementById(id);return el?el.value.trim():'';};
+  const nome=g('ad-nome'),cpf=g('ad-cpf');
+  const dataAssin=g('ad-assin'),novoVenc=g('ad-venc');
+  const novoAlug=parseFloat(g('ad-aluguel'))||0,novoCond=parseFloat(g('ad-cond'))||0;
+  const vigencia=g('ad-vigencia'),indice=g('ad-indice'),obs=g('ad-obs');
+  const hoje=new Date();
+  const pix=c.pix||'(a definir)';
+  const extrasHtml=(window._adExtras||[]).filter(e=>e.label).map(e=>`<p><strong>${e.label}:</strong> ${e.valor}</p>`).join('');
+  const body=`<div class="doc" id="doc-inner">
+<h1>ADITIVO DE RENOVAÇÃO DE CONTRATO DE LOCAÇÃO</h1>
+<p style="text-align:center;font-size:11px">Lei nº 8.245/1991 (Lei do Inquilinato)</p>
+<p>Pelo presente instrumento particular, as partes abaixo qualificadas celebram o presente aditivo ao contrato de locação:</p>
+<p><strong>LOCADOR(A) / SÍNDICO(A):</strong> ${c.sindico||'___________'}${c.sindicoCpf?', CPF '+c.sindicoCpf:''}.<br>
+<strong>Condomínio:</strong> ${c.nome||'Condomínio Girassol'}${c.cnpj?', CNPJ '+c.cnpj:''}${c.endereco?'.<br>Endereço: '+c.endereco:''}.</p>
+<p><strong>LOCATÁRIO(A):</strong> ${nome||'___________'}${cpf?', CPF '+cpf:''}.</p>
+<p><strong>IMÓVEL OBJETO DA LOCAÇÃO:</strong> ${c.nome||'Condomínio Girassol'} — <strong>${u.numero}</strong>${c.endereco?', '+c.endereco:''}.</p>
+<p><strong>CLÁUSULA PRIMEIRA — DA RENOVAÇÃO</strong></p>
+<p>As partes acordam a renovação do contrato de locação por mais 12 (doze) meses, com início em ${dataAssin}${novoVenc?' e término em '+novoVenc:''}.</p>
+<p><strong>CLÁUSULA SEGUNDA — DO REAJUSTE</strong></p>
+<p>Fica estabelecido novo valor mensal de aluguel de <strong>R$ ${fmtR(novoAlug)} (${extenso(novoAlug)})</strong>${novoCond>0?`, acrescido de condomínio de R$ ${fmtR(novoCond)} (${extenso(novoCond)})`:''}, com vigência a partir de ${vigencia}. Reajuste pelo índice ${indice}.</p>
+<p>Pagamento até o dia 05 de cada mês. PIX: ${pix}.</p>
+${obs?`<p><strong>CLÁUSULA TERCEIRA — CONDIÇÕES ESPECIAIS</strong></p><p>${obs}</p>`:''}
+${extrasHtml}
+<p>Todas as demais cláusulas do contrato original permanecem inalteradas.</p>
+<p>As partes declaram ter lido e estar de acordo, firmado em 02 vias.</p>
+<p>Vila Velha/ES, ${dataAssin}.</p>
+<div class="assinaturas">
+  <div class="ass">LOCADOR(A) / SÍNDICO(A):<br>${c.sindico||'___________________________'}${c.sindicoCpf?'<br>CPF: '+c.sindicoCpf:''}</div>
+  <div class="ass">LOCATÁRIO(A):<br>${nome||'___________________________'}${cpf?'<br>CPF: '+cpf:''}</div>
+  <div class="ass">TESTEMUNHA 1:<br>___________________________ CPF: _______________</div>
+  <div class="ass">TESTEMUNHA 2:<br>___________________________ CPF: _______________</div>
+</div>
+</div>`;
+  document.getElementById('modal-doc-titulo').textContent=`Aditivo de Renovação — ${u.numero}`;
+  document.getElementById('modal-doc-body').innerHTML=body;
+}
+
+// ===== SALVAR UNIDADE =====
+function salvarUnidade(unidId, btn){
+  sv();
+  // Feedback visual no botão
+  const orig = btn ? btn.innerHTML : '';
+  if(btn){ btn.innerHTML='✓ Salvo!'; btn.style.background='#e8f5ee'; btn.style.color='#1a6b4a'; }
+  setTimeout(()=>{ if(btn){ btn.innerHTML=orig; btn.style.background='#fff'; btn.style.color=COR; } }, 2000);
+  toast('💾 ' + (dados.unidades.find(x=>x.id===unidId)||{}).numero + ' salvo com sucesso!');
+}
+
+// ===== COBRANÇA / RECIBO =====
+function enviarCobranca(unidId){
+  const u=dados.unidades.find(x=>x.id===unidId);if(!u)return;
+  const m=dados.meses[`${u.id}__${mesSel}`]||{};const c=dados.cond||{};
+  const total=calcTotal(u,m);
+  const pags=(m.pagamentos||[]).reduce((s,pg)=>s+(parseFloat(pg.valor)||0),0);
+  const pago=pags>0?pags:(m.quitado?total:(parseFloat(m.pago)||0));
+  const saldo=total-pago;
+  const nome=(u.locatario&&u.locatario.nome)||'Prezado(a)';
+  const tel=(u.locatario&&u.locatario.tel||'').replace(/\D/g,'');
+  let itens='';
+  if(parseFloat(u.aluguel)>0)itens+=`\n• Aluguel: R$ ${fmtR(parseFloat(u.aluguel))}`;
+  if(parseFloat(u.condominio)>0)itens+=`\n• Condomínio: R$ ${fmtR(parseFloat(u.condominio))}`;
+  if(parseFloat(m.agua_valor)>0)itens+=`\n• Água: R$ ${fmtR(parseFloat(m.agua_valor))}`;
+  if(u.energia_tipo==='percentual'&&parseFloat(m.energia_valor)>0)itens+=`\n• Energia (${u.energia_pct||0}%): R$ ${fmtR(parseFloat(m.energia_valor))}`;
+  if(parseFloat(m.iptu)>0)itens+=`\n• IPTU: R$ ${fmtR(parseFloat(m.iptu))}`;
+  if(parseFloat(m.lixo)>0)itens+=`\n• Taxa de Lixo: R$ ${fmtR(parseFloat(m.lixo))}`;
+  if(parseFloat(m.outros)>0)itens+=`\n• Outros: R$ ${fmtR(parseFloat(m.outros))}`;
+  (m.extras||[]).forEach(e=>{if(parseFloat(e.valor)>0)itens+=`\n• ${e.nome||'Extra'}: R$ ${fmtR(parseFloat(e.valor))}`;});
+  (m.campos_extras||[]).forEach(e=>{if(e.label)itens+=`\n• ${e.label}: ${e.valor}`;});
+  const cau=caucaoInfo(u);
+  const cauTxt=cau.saldo>0?`\n\n🔐 *Caução (saldo a pagar): R$ ${fmtR(cau.saldo)}* (combinado R$ ${fmtR(cau.comb)}, pago R$ ${fmtR(cau.pago)})`:'';
+  const pix=c.pix||'(a definir)';
+  const msg=`Prezado(a) *${nome}*, 🌻\n\nSegue demonstrativo de *${labelMes(mesSel)}* — *${c.nome||'Condomínio Girassol'}, ${u.numero}*:${itens}\n\n*Total: R$ ${fmtR(total)}*${pago>0&&!m.quitado?`\n*Pago: R$ ${fmtR(pago)}*\n*Saldo: R$ ${fmtR(saldo)}*`:''}${cauTxt}\n\nPagamento até o dia *05* via PIX: *${pix}*\n\nAtenciosamente,\n*${c.sindico||'Administração'}*\n${c.tel||''}`;
+  if(tel)window.open(`https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`,'_blank');
+  else{navigator.clipboard&&navigator.clipboard.writeText(msg);toast('Número não cadastrado. Mensagem copiada!');}
+}
+
+function gerarRecibo(unidId){
+  const u=dados.unidades.find(x=>x.id===unidId);if(!u)return;
+  const m=dados.meses[`${u.id}__${mesSel}`]||{};const c=dados.cond||{};
+  const total=calcTotal(u,m);
+  const pags=(m.pagamentos||[]).reduce((s,pg)=>s+(parseFloat(pg.valor)||0),0);
+  const pago=pags>0?pags:(m.quitado?total:(parseFloat(m.pago)||0));
+  const saldo=Math.max(0,total-pago);
+  const lct=u.locatario||{};
+  const ultPag=m.pagamentos&&m.pagamentos.length>0?m.pagamentos[m.pagamentos.length-1]:null;
+  const dataPag=ultPag?(new Date(ultPag.data+'T12:00:00').toLocaleDateString('pt-BR')):(new Date().toLocaleDateString('pt-BR'));
+  const tel=(lct.tel||'').replace(/\D/g,'');
+  let itens='';
+  if(parseFloat(u.aluguel)>0)itens+=`\n• Aluguel: R$ ${fmtR(parseFloat(u.aluguel))}`;
+  if(parseFloat(u.condominio)>0)itens+=`\n• Condomínio: R$ ${fmtR(parseFloat(u.condominio))}`;
+  if(parseFloat(m.agua_valor)>0)itens+=`\n• Água: R$ ${fmtR(parseFloat(m.agua_valor))}`;
+  if(u.energia_tipo==='percentual'&&parseFloat(m.energia_valor)>0)itens+=`\n• Energia: R$ ${fmtR(parseFloat(m.energia_valor))}`;
+  if(parseFloat(m.iptu)>0)itens+=`\n• IPTU: R$ ${fmtR(parseFloat(m.iptu))}`;
+  if(parseFloat(m.lixo)>0)itens+=`\n• Taxa de Lixo: R$ ${fmtR(parseFloat(m.lixo))}`;
+  (m.extras||[]).forEach(e=>{if(parseFloat(e.valor)>0)itens+=`\n• ${e.nome||'Extra'}: R$ ${fmtR(parseFloat(e.valor))}`;});
+  (m.campos_extras||[]).forEach(e=>{if(e.label)itens+=`\n• ${e.label}: ${e.valor}`;});
+  const cau=caucaoInfo(u);
+  const cauMes=cau.arr.filter(x=>(x.data||'').slice(0,7)===mesSel).reduce((a,x)=>a+(parseFloat(x.valor)||0),0);
+  const cauTxt=(cauMes>0||cau.saldo>0)?`\n\n🔐 *Caução:*${cauMes>0?`\n• Recebido neste mês: R$ ${fmtR(cauMes)}`:''}\n• Total pago: R$ ${fmtR(cau.pago)} de R$ ${fmtR(cau.comb)}${cau.saldo>0?`\n• Saldo a pagar: R$ ${fmtR(cau.saldo)}`:' ✓'}`:'';
+  const msg=`🧾 *RECIBO DE PAGAMENTO*\n🌻 *${c.nome||'Condomínio Girassol'}*\n\n*Unidade:* ${u.numero}\n*Morador(a):* ${lct.nome||'—'}\n*Competência:* ${labelMes(mesSel)}\n*Data do Pagamento:* ${dataPag}\n\n*Discriminação:*${itens}\n\n*Total: R$ ${fmtR(total)}*\n*Pago: R$ ${fmtR(pago)}*\n${saldo>0?`*Saldo restante: R$ ${fmtR(saldo)}*`:'✓ *Pagamento quitado*'}${cauTxt}\n\n🌻 ${c.sindico||'Administração'}\n${c.tel||''}`;
+  if(tel)window.open(`https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`,'_blank');
+  else{navigator.clipboard&&navigator.clipboard.writeText(msg);toast('Número não cadastrado. Recibo copiado!');}
+}
+
+// ===== NUVEM =====
+async function salvarNuvem(){toast('Salvando...');try{const r=await fetch(SHEETS_URL,{method:'POST',body:JSON.stringify(dados)});const j=await r.json();toast(j.status==='ok'?'✓ Salvo!':'Erro ao salvar!',j.status!=='ok');}catch(e){toast('Erro de conexão!',true);}}
+async function carregarNuvem(){if(!confirm('Carregar da nuvem? Dados atuais serão substituídos.'))return;toast('Carregando...');try{const r=await fetch(SHEETS_URL);const j=await r.json();if(j&&j.unidades){dados=j;limparCond();sv();renderTabs();renderContent();toast('✓ Carregado!');}else toast('Nenhum dado encontrado.',true);}catch(e){toast('Erro de conexão!',true);}}
+
+// ===== UTILITÁRIOS =====
+function imprimirDoc(){const inner=document.getElementById('doc-inner');if(!inner)return;const w=window.open('','_blank');w.document.write(`<html><head><title>Documento</title><style>body{font-family:'Times New Roman',serif;font-size:13px;line-height:1.8;padding:30px;max-width:800px;margin:0 auto}h1{text-align:center;font-size:16px;margin-bottom:14px}p{margin-bottom:10px;text-align:justify}.assinaturas{margin-top:50px;display:grid;grid-template-columns:1fr 1fr;gap:30px}.ass{text-align:center;border-top:1px solid #000;padding-top:6px;font-size:12px}</style></head><body>${inner.innerHTML}</body></html>`);w.document.close();w.print();}
+
+function parseDateVenc(vc){if(!vc)return null;const mn={JANEIRO:0,FEVEREIRO:1,MARÇO:2,ABRIL:3,MAIO:4,JUNHO:5,JULHO:6,AGOSTO:7,SETEMBRO:8,OUTUBRO:9,NOVEMBRO:10,DEZEMBRO:11};const partes=vc.toUpperCase().split(' ');const m=mn[partes[partes.length-2]||partes[0]];const a=parseInt(partes[partes.length-1]);if(m===undefined||isNaN(a))return null;return new Date(a,m+1,0);}
+
+function extenso(v){
+  if(!v||v===0)return 'zero reais';
+  const u=['','um','dois','três','quatro','cinco','seis','sete','oito','nove','dez','onze','doze','treze','quatorze','quinze','dezesseis','dezessete','dezoito','dezenove'];
+  const d=['','','vinte','trinta','quarenta','cinquenta','sessenta','setenta','oitenta','noventa'];
+  const c=['','cem','duzentos','trezentos','quatrocentos','quinhentos','seiscentos','setecentos','oitocentos','novecentos'];
+  function n(x){x=Math.round(x);if(x===0)return '';if(x===100)return 'cem';if(x<20)return u[x];if(x<100)return d[Math.floor(x/10)]+(x%10?' e '+u[x%10]:'');const r=x%100;return c[Math.floor(x/100)]+(r?' e '+n(r):'');}
+  const int=Math.floor(v),cts=Math.round((v-int)*100);let res='';
+  if(int>0){if(int>=1000){const mil=Math.floor(int/1000),resto=int%1000;res+=(mil===1?'mil':n(mil)+' mil')+(resto>0?' e '+n(resto):'');}else res+=n(int);res+=int===1?' real':' reais';}
+  if(cts>0){if(res)res+=' e ';res+=n(cts)+(cts===1?' centavo':' centavos');}
+  return res||'zero reais';
+}
+
+function fmtR(v){return (parseFloat(v)||0).toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function toast(msg,erro=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(erro?' erro':'')+' show';setTimeout(()=>t.className='toast'+(erro?' erro':''),3500);}
+
+document.querySelectorAll('.modal-overlay').forEach(o=>{o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('aberto');});});
+
+if(sessionStorage.getItem(AUTH_KEY)==='1'){
+  document.getElementById('tela-login').style.display='none';
+  document.getElementById('app').style.display='block';
+  iniciar();
+}
+</script>
+</body>
+</html>
